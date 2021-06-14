@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="src/styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="src/utils.js"></script>
-    <script src="src/calls.js"></script>
+    <script src="src/calls_history.js"></script>
 </head>
 
 <body>
@@ -77,9 +77,9 @@
             "start_time":"4:00:00",
             "duration":"5:00:00"
         }];
-        updateCallsList(history, "history");
+        updateHistory(history, "history");
         function searchLogs(val){
-            updateCallsList(filter(history, val), "history");
+            updateHistory(filter(history, val), "history");
         }
         
 

@@ -8,6 +8,8 @@
     <title>MS Teams Clone</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="./utils.js"></script>
+    <script src="./calls_contacts.js"></script>
 </head>
 
 <body>
@@ -52,24 +54,29 @@
         <div>
             <div class="history">
                 <h1>Contacts</h1>
-                <input type="text" name="search" placeholder="Type a name">
-                <div class="contact-card">
-                    <span>
-                        <div class="avatar">AJ</div>
-                        Aman
-                    </span>
-                    <span>
-                        <button onclick="setCallee('Aman')"><i class="fa fa-video-camera"></i></button>
-                        <button><i class="fa fa-phone"></i></button>
-                    </span>
+                <input type="text" name="search" placeholder="Type a name" onkeyup="searchContacts(this.value)">
+                <div id="contactsList">
+
                 </div>
             </div>
         </div>
     </div>
-    </div>
     <script>
         function setCallee(callee) {
             localStorage.setItem("callee", callee)
+        }
+        const contacts=[{
+            "name":"Aman Jain",
+            "start_time":"2:00",
+            "duration":"12:00:00"
+        },{
+            "name":"Aanchal Jain",
+            "start_time":"4:00:00",
+            "duration":"5:00:00"
+        }];
+        updateContactsList(contacts, "contactsList");
+        function searchContacts(val){
+            updateContactsList(filter(contacts, val), "contactsList");
         }
     </script>
 </body>

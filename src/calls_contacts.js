@@ -1,27 +1,22 @@
-function updateCallsList(history, id){
+function updateContactsList(contacts, id){
     let contentAll="";
-    for(let i=0;i<history.length;i++){
+    for(let i=0;i<contacts.length;i++){
         let content="<div class='contact-card'>\
                     <div class='upper'>\
                         <div>\
                             <div class='avatar'>"+
-                                getAvatar(history[i].name)+
+                                getAvatar(contacts[i].name)+
                                 "</div>\
                             <span class='name'>"+
-                                history[i].name+
+                                contacts[i].name+
                                 "</span>\
                         </div>\
                         <div>\
                             <button onclick='setCallee(\""+
-                                history[i].name+
+                                contacts[i].name+
                                 "\")'><i class='fa fa-video-camera'></i></button>\
                             <button><i class='fa fa-phone'></i></button>\
                         </div>\
-                    </div>\
-                    <div class='lower'>\
-                        <span class='time'>"+
-                            history[i].start_time
-                        +"</span>\
                     </div>\
                 <div>";
         contentAll+=content;
