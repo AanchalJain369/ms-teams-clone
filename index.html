@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Teams Clone</title>
+    <link rel="stylesheet" href="src/styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="src/utils.js"></script>
+    <script src="src/calls.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="main-nav nav">
+            <ul>
+                <li class="left-align"><input type="text" name="search" placeholder="Search"></li>
+                <li class="right-align">
+                    <div class="avatar">
+                        AJ
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div>
+        <div>
+            <div class="side-nav">
+                <a>
+                    <i class="fa fa-bell-o"></i>
+                </a>
+                <a>
+                    <i class="fa fa-commenting-o"></i>
+                </a>
+                <a class="active">
+                    <i class="fa fa-phone"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-window">
+            <nav class="sub-nav nav">
+                <ul>
+                    <li>
+                        <h1><i class="fa fa-phone"></i> Calls</h1>
+                    </li>
+                    <li class="active"><a>Phone</a></li>
+                    <li><a href="src/contacts.html">Contacts</a></li>
+                </ul>
+            </nav>
+
+
+            <div>
+                <div class="history">
+                    <h1>Recents</h1>
+                    <input type="text" name="search" placeholder="Type a name" onkeyup="searchLogs(this.value)">
+                    <div id="history">
+
+                    </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function setCallee(callee) {
+            localStorage.setItem("callee", callee);
+            window.location.href="src/videoCall.html"
+        }
+        const history=[{
+            "name":"Aman Jain",
+            "start_time":"2:00",
+            "duration":"12:00:00"
+        },{
+            "name":"Aanchal Jain",
+            "start_time":"4:00:00",
+            "duration":"5:00:00"
+        }];
+        updateCallsList(history, "history");
+        function searchLogs(val){
+            updateCallsList(filter(history, val), "history");
+        }
+        
+
+    </script>
+</body>
+
+</html>

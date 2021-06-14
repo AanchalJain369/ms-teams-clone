@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Teams Clone</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="main-nav nav">
+            <ul>
+                <li class="left-align"><input type="text" name="search" placeholder="Search"></li>
+                <li class="right-align">
+                    <div class="avatar">
+                        AJ
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div>
+        <div>
+            <div class="side-nav">
+                <a>
+                    <i class="fa fa-bell-o"></i>
+                </a>
+                <a>
+                    <i class="fa fa-commenting-o"></i>
+                </a>
+                <a class="active">
+                    <i class="fa fa-phone"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-window">
+            <nav class="sub-nav nav">
+                <ul>
+                    <li>
+                        <h1><i class="fa fa-phone"></i> Name </h1>
+                    </li>
+                </ul>
+            </nav>
+
+
+            <div class="main-content">
+                <video id="remoteVideo" autoplay>
+                </video>
+                <div class="video-controls">
+                    <button><i class="fa fa-microphone-slash"></i></button>
+                    <button><i class="fa fa-video-camera"></i></button>
+                    <button class="btn-danger"><i class="fa fa-close"></i></button>
+                </div>
+                <video id="localVideo" autoplay draggable="true"></video>
+            </div>
+        </div>
+    </div>
+    <script src="videoCall.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Teams Clone</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+</head>
+
+<body>
+    <header>
+        <nav class="main-nav nav">
+            <ul>
+                <li class="left-align"><input type="text" name="search" placeholder="Search"></li>
+                <li class="right-align">
+                    <div class="avatar">
+                        AJ
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div>
+        <div class="side-nav">
+            <a>
+                <i class="fa fa-bell-o"></i>
+            </a>
+            <a>
+                <i class="fa fa-commenting-o"></i>
+            </a>
+            <a class="active">
+                <i class="fa fa-phone"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-window">
+        <nav class="sub-nav nav">
+            <ul>
+                <li>
+                    <h1><i class="fa fa-phone"></i> Calls</h1>
+                </li>
+                <li><a href="../index.html">Phone</a></li>
+                <li class="active"><a href="src/contacts.html">Contacts</a></li>
+            </ul>
+        </nav>
+
+
+        <div>
+            <div class="history">
+                <h1>Contacts</h1>
+                <input type="text" name="search" placeholder="Type a name">
+                <div class="contact-card">
+                    <span>
+                        <div class="avatar">AJ</div>
+                        Aman
+                    </span>
+                    <span>
+                        <button onclick="setCallee('Aman')"><i class="fa fa-video-camera"></i></button>
+                        <button><i class="fa fa-phone"></i></button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script>
+        function setCallee(callee) {
+            localStorage.setItem("callee", callee)
+        }
+    </script>
+</body>
+
+</html>
