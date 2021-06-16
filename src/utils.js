@@ -23,3 +23,11 @@ function filter(data, searchString){
     }
     return updates;
 }
+
+function formToJSON(form){
+    let res={};
+    let formData=new FormData(form);
+    console.log(formData)
+    formData.forEach((val,key)=>res[key]=val);
+    return res;
+}

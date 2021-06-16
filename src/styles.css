@@ -20,6 +20,9 @@ body{
 }
 
 /* Utility */
+label{
+    font-size:17px;
+}
 .left-align{
     float: left;
 }
@@ -35,12 +38,19 @@ input:focus{
 .text-success{
     color:var(--success-color);
 }
+.text-center{
+    text-align: center;
+}
+.center{
+    margin:auto;
+}
 input{
     font-size: 20px;
     padding: 10px;
     border-radius: 3px;
     border:hidden;
-    width: 100%;
+    width: 90%;
+    margin: 2px 0 10px;
 }
 button{
     outline: none;
@@ -59,6 +69,8 @@ a{
     padding: 7px 10px 7px 10px;
     border-radius: 100%;
     line-height: 1.5em;
+    width:20px;
+    text-align: center;
     display: inline-block;
 }
 /* Main Nav */
@@ -97,12 +109,12 @@ a{
     width: 50px;
     background-color: rgb(224, 215, 215);
     height: 100vh;
-    position: fixed;
+    position: absolute;
     display: flex;
     flex-direction: column;
     font-size: 30px;
     align-items:center;
-    box-shadow: 4px 3px 20px 0px rgb(177 177 177);
+    box-shadow: 0px 20px 20px 0px rgb(177 177 177);
 }
 
 .side-nav a{
@@ -125,6 +137,9 @@ a{
 }
 
 /* Calls History contact card */
+.contact-card{
+    margin-bottom: 10px;
+}
 .contact-card .upper{
     font-size:18px;
     display: flex;
@@ -134,7 +149,7 @@ a{
 }
 .contact-card .upper button{
     padding: 8px;
-    font-size: 18px;
+    font-size: 16px;
     border-radius: 3px;
     margin-right: 5px;
 }
@@ -177,4 +192,69 @@ video{
 .btn-danger{
     color:white;
     background-color: var(--danger-color);
+}
+
+.btn-success{
+    color: white;
+    background-color: var(--success-color);
+}
+
+.border-radius{
+    border-radius: 5px;
+}
+
+#modal{
+    display:none;
+    position: absolute;
+    top:0;
+    left:0;
+    z-index: 995;
+    width:100vw;
+    height:100vh;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4);
+}
+#modalBox{
+    margin: 15% auto;
+    width: 300px;
+    padding: 20px;
+    z-index:996;
+    background-color: var(--light-color);
+}
+#modalBox input{
+    width:90%;
+    font-size: 16px;
+}
+
+#loading{
+    display: none;
+    width: 100vw;
+    position:absolute;
+    top:0;
+    left:0;
+    height: 100%;
+    z-index:999;
+    position: fixed;
+    justify-items: center;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.1);
+}
+
+#loader{
+    margin: auto;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    border: solid 5px rgba(189, 189, 189, 0.30);
+    border-bottom: solid 5px rgba(3, 155, 229, 1);
+    border-left: dotted 5px rgba(3, 155, 229, 1);
+    box-shadow: inset -3px 2px 1px 1px rgb(177 177 177);
+    /* border-style: ; */
+    animation: rotate 2000ms infinite;
+}
+
+@keyframes rotate {
+    to{
+        transform: rotate(360deg);
+    }
 }

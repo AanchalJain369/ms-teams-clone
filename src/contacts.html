@@ -54,26 +54,72 @@
         <div>
             <div class="history">
                 <h1>Contacts</h1>
+                <button class="btn-success border-radius right-align" id="addContact">
+                    Add New Contact
+                    <i class="fa fa-plus-circle"></i>
+                </button>
+                <br/>
+                <br/>
                 <input type="text" name="search" placeholder="Type a name" onkeyup="searchContacts(this.value)">
                 <div id="contactsList">
 
                 </div>
             </div>
         </div>
+        <div id="modal">
+            <div id="modalBox" class="border-radius">
+                <button class="right-align btn-danger" id="close"><i class="fa fa-close" ></i></button>
+                <h1>Add new Contact</h1>
+                <form id="addContactForm">
+                <label>Enter Contact name:</label>
+                <input type="text" name="name"/>
+                <label>Enter Contact email:</label>
+                <input type="email" name="email"/>
+                <div class="text-center"><button type="submit" class="btn-success">Add <i class="fa fa-plus-circle"></i></button></div>
+                </form>
+            </div>
+        </div>  
+    </div>
+    <div id="loading">
+        <div id="loader"></div>
     </div>
     <script>
+        let contacts=[{
+            "name":"Aman Jain",
+            "email":"amanpatniajmer@gmail.com"
+        },{
+            "name":"Aanchal Jain",
+            "email":"aanchal.jain.eee19@itbhu.ac.in"
+        }];
+        function stopLoading(){
+            document.getElementById('loading').style.display="none";
+        }
+        function startLoading(){
+            document.getElementById('loading').style.display="flex";
+            console.log('loading')
+        }
+        let addContactForm=document.getElementById('addContactForm');
+        addContactForm.onsubmit=function(e){
+            e.preventDefault();
+            console.log("Contact Saved");
+            startLoading();
+            setTimeout(stopLoading,2000);
+            const newContact=formToJSON(e.target);
+            contacts.push(newContact);
+            updateContactsList(contacts,'contactsList');
+            addContactForm.reset();
+        }        
+        let closeBtn=document.getElementById('close');
+        closeBtn.onclick=function(){
+            document.getElementById('modal').style.display='none';
+        }
+        let newContactBtn=document.getElementById('addContact');
+        newContactBtn.onclick=function(){
+            document.getElementById('modal').style.display='block';
+        }
         function setCallee(callee) {
             localStorage.setItem("callee", callee)
         }
-        const contacts=[{
-            "name":"Aman Jain",
-            "start_time":"2:00",
-            "duration":"12:00:00"
-        },{
-            "name":"Aanchal Jain",
-            "start_time":"4:00:00",
-            "duration":"5:00:00"
-        }];
         updateContactsList(contacts, "contactsList");
         function searchContacts(val){
             updateContactsList(filter(contacts, val), "contactsList");

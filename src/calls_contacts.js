@@ -18,7 +18,7 @@ function updateContactsList(contacts, id){
                             <button><i class='fa fa-phone'></i></button>\
                         </div>\
                     </div>\
-                <div>";
+                </div>";
         contentAll+=content;
     }
     document.getElementById(id).innerHTML=contentAll;
