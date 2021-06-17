@@ -1,110 +1,155 @@
-body{
-    margin:0;
+body {
+    margin: 0;
 }
-:root{
-    --primary-color:#6666aa;
-    --success-color:green;
-    --danger-color:#ea4335;
-    --light-color:#efefef;
+
+:root {
+    --primary-color: #6666aa;
+    --success-color: green;
+    --danger-color: #ea4335;
+    --light-color: #efefef;
 }
+
+
 /* Navbar common styles */
-.nav ul{
+
+.nav ul {
     margin: 0;
     list-style-type: none;
-    overflow: hidden;   
+    overflow: hidden;
 }
 
-.nav ul li{
+.nav ul li {
     float: left;
-    margin:0 10px 0 10px;
+    margin: 0 10px 0 10px;
 }
+
 
 /* Utility */
-label{
-    font-size:17px;
+
+label {
+    font-size: 17px;
 }
-.left-align{
+
+.left-align {
     float: left;
 }
-.right-align{
+
+.right-align {
     float: right !important;
 }
 
-input:focus{
+input:focus {
     outline: none;
-    border-bottom: solid 3px var(--primary-color) ;
+    border-bottom: solid 3px var(--primary-color);
 }
 
-.text-success{
-    color:var(--success-color);
+.text-success {
+    color: var(--success-color);
 }
-.text-center{
+
+.text-center {
     text-align: center;
 }
-.center{
-    margin:auto;
+
+.center {
+    margin: auto;
 }
-input{
+
+input {
     font-size: 20px;
     padding: 10px;
     border-radius: 3px;
-    border:hidden;
+    border: hidden;
     width: 90%;
     margin: 2px 0 10px;
 }
-button{
+
+button {
     outline: none;
     border: none;
     padding: 5px;
     box-shadow: 4px 3px 5px 0px rgb(177 177 177);
     cursor: pointer;
 }
-a{
+
+a {
     text-decoration: none;
     color: black;
 }
 
-.avatar{
+.avatar {
     background-color: rgb(241, 217, 227);
     padding: 7px 10px 7px 10px;
     border-radius: 100%;
     line-height: 1.5em;
-    width:20px;
+    width: 20px;
     text-align: center;
     display: inline-block;
 }
+
+.btn-danger {
+    color: white;
+    background-color: var(--danger-color);
+}
+
+.btn-success {
+    color: white;
+    background-color: var(--success-color);
+}
+
+.border-radius {
+    border-radius: 5px;
+}
+
+.main-content {
+    padding-left: 70px;
+    padding-top: 20px;
+}
+
+
 /* Main Nav */
-.main-nav{
+
+.main-nav {
     background-color: var(--primary-color);
     font-size: 20px;
     line-height: 1.5em;
     box-shadow: inset 0px 0px 10px 1px rgb(23 22 22 / 77%);
 }
-.main-nav li{
+
+.main-nav li {
     padding: 10px;
 }
 
+
 /* Sub Nav */
-.sub-nav{
+
+.sub-nav {
     box-shadow: -8px 6px 20px 4px rgb(177 177 177);
 }
-.sub-nav ul{
+
+.sub-nav ul {
     background-color: rgb(224, 215, 215);
-    margin:0;
+    margin: 0;
 }
-.sub-nav ul li a{
+
+.sub-nav ul li a {
     font-size: 20px;
     line-height: 3.0em;
 }
-.sub-nav li.active a{
+
+.sub-nav li.active a {
     border-bottom: solid 5px var(--primary-color);
 }
-.sub-nav li a:hover{
+
+.sub-nav li a:hover {
     border-bottom: solid 5px var(--primary-color);
     opacity: 70%;
 }
+
+
 /* Side Nav */
-.side-nav{
+
+.side-nav {
     margin-top: 65px;
     width: 50px;
     background-color: rgb(224, 215, 215);
@@ -113,134 +158,138 @@ a{
     display: flex;
     flex-direction: column;
     font-size: 30px;
-    align-items:center;
+    align-items: center;
     box-shadow: 0px 20px 20px 0px rgb(177 177 177);
 }
 
-.side-nav a{
+.side-nav a {
     margin-bottom: 20px;
-    color:rgb(75, 75, 75);
+    color: rgb(75, 75, 75);
     padding: 10px;
 }
 
-.side-nav a:hover{
+.side-nav a:hover {
     color: black;
 }
 
-.side-nav a.active{
+.side-nav a.active {
     border-left: solid 4px var(--primary-color);
 }
 
-.main-content{
-    padding-left: 70px;
-    padding-top: 20px;
-}
 
 /* Calls History contact card */
-.contact-card{
-    margin-bottom: 10px;
+
+.contact-card {
+    padding: 10px;
+    box-shadow: 1px 0px 5px 0px rgb(177 177 177);
 }
-.contact-card .upper{
-    font-size:18px;
+
+.contact-card .upper {
+    font-size: 18px;
     display: flex;
     justify-content: space-between;
     padding-top: 15px;
     align-items: center;
 }
-.contact-card .upper button{
-    padding: 8px;
+
+.contact-card .upper button {
+    padding: 6px;
     font-size: 16px;
-    border-radius: 3px;
     margin-right: 5px;
 }
-.contact-card .lower{
+
+.contact-card .lower {
     padding-left: 40px;
 }
-.contact-card .time{
+
+.contact-card .time {
     font-size: 14px;
-    color:var(--success-color);
+    color: var(--success-color);
 }
-.history{
+
+.history {
     width: 300px;
-    margin:auto;
+    margin: auto;
 }
-.history input{
+
+.history input {
     background-color: rgb(218, 216, 216);
-    color:black;
+    color: black;
     box-shadow: 4px 3px 5px 0px rgb(177 177 177);
 }
 
-video{
-    width:800px;
+
+/* video call */
+
+video {
+    width: 800px;
     background-color: var(--light-color);
     border-radius: 5px;
 }
-#localVideo{
+
+#localVideo {
     width: 300px;
 }
-.video-controls{
+
+.video-controls {
     width: 800px;
     z-index: 20;
     text-align: center;
 }
-.video-controls button{
+
+.video-controls button {
     font-size: 25px;
-    margin:5px;
-    
+    margin: 5px;
 }
 
-.btn-danger{
-    color:white;
-    background-color: var(--danger-color);
-}
 
-.btn-success{
-    color: white;
-    background-color: var(--success-color);
-}
+/* modal box */
 
-.border-radius{
-    border-radius: 5px;
-}
-
-#modal{
-    display:none;
+.modal {
+    display: none;
     position: absolute;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
     z-index: 995;
-    width:100vw;
-    height:100vh;
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4);
+    width: 100vw;
+    height: 100vh;
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
 }
-#modalBox{
+
+.modalBox {
     margin: 15% auto;
     width: 300px;
     padding: 20px;
-    z-index:996;
+    z-index: 996;
     background-color: var(--light-color);
 }
-#modalBox input{
-    width:90%;
+
+.modalBox input {
+    width: 90%;
     font-size: 16px;
 }
 
-#loading{
+
+/* Loading / Loader */
+
+#loading {
     display: none;
     width: 100vw;
-    position:absolute;
-    top:0;
-    left:0;
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
-    z-index:999;
+    z-index: 999;
     position: fixed;
     justify-items: center;
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-#loader{
+#loader {
     margin: auto;
     border-radius: 50%;
     width: 30px;
@@ -254,7 +303,41 @@ video{
 }
 
 @keyframes rotate {
-    to{
+    to {
         transform: rotate(360deg);
     }
+}
+
+.alert {
+    display: none;
+    z-index: 999;
+    font-size: 18px;
+    position: fixed;
+    box-shadow: 4px 4px 0px 0px rgb(177 177 177);
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    max-width: 250px;
+}
+
+.fadeOut {
+    animation: fadeOut normal 1000ms;
+}
+
+@keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
+
+.alert-success {
+    background-color: var(--success-color);
+    color: white;
+}
+
+.alert-danger {
+    background-color: var(--danger-color);
+    color: white;
 }

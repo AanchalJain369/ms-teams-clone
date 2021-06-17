@@ -8,8 +8,6 @@
     <title>MS Teams Clone</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <script src="./utils.js"></script>
-    <script src="./calls_contacts.js"></script>
 </head>
 
 <body>
@@ -58,73 +56,140 @@
                     Add New Contact
                     <i class="fa fa-plus-circle"></i>
                 </button>
-                <br/>
-                <br/>
+                <br />
+                <br />
                 <input type="text" name="search" placeholder="Type a name" onkeyup="searchContacts(this.value)">
                 <div id="contactsList">
 
                 </div>
             </div>
         </div>
-        <div id="modal">
-            <div id="modalBox" class="border-radius">
-                <button class="right-align btn-danger" id="close"><i class="fa fa-close" ></i></button>
+        <div id="addContactModal" class="modal">
+            <div class="modalBox border-radius">
+                <button class="right-align btn-danger" id="addContactClose"><i class="fa fa-close"></i></button>
                 <h1>Add new Contact</h1>
                 <form id="addContactForm">
-                <label>Enter Contact name:</label>
-                <input type="text" name="name"/>
-                <label>Enter Contact email:</label>
-                <input type="email" name="email"/>
-                <div class="text-center"><button type="submit" class="btn-success">Add <i class="fa fa-plus-circle"></i></button></div>
+                    <label>Enter Contact name:</label>
+                    <input type="text" name="name" />
+                    <label>Enter Contact email:</label>
+                    <input type="email" name="email" />
+                    <div class="text-center"><button type="submit" class="btn-success">Add <i
+                                class="fa fa-plus-circle"></i></button></div>
                 </form>
             </div>
-        </div>  
+        </div>
+        <div id="editContactModal" class="modal">
+            <div class="modalBox border-radius">
+                <button class="right-align btn-danger" id="editContactClose"><i class="fa fa-close"></i></button>
+                <h1>Edit Contact</h1>
+                <form id="editContactForm">
+                    <label>Edit contact name:</label>
+                    <input type="text" name="name" />
+                    <label>Edit contact email:</label>
+                    <input type="email" name="email" />
+                    <div class="text-center"><button type="submit" class="btn-success">Edit <i
+                                class="fa fa-pencil"></i></button></div>
+                </form>
+            </div>
+        </div>
     </div>
     <div id="loading">
         <div id="loader"></div>
     </div>
+    <div id="alert" class="alert alert-danger">
+        <span>{msg}</span>
+        <span><i class="fa fa-check-circle"></i></span>
+    </div>
+    <script src="./utils.js"></script>
+    <script src="./calls_contacts.js"></script>
     <script>
-        let contacts=[{
-            "name":"Aman Jain",
-            "email":"amanpatniajmer@gmail.com"
-        },{
-            "name":"Aanchal Jain",
-            "email":"aanchal.jain.eee19@itbhu.ac.in"
-        }];
-        function stopLoading(){
-            document.getElementById('loading').style.display="none";
+        function showAlert(type, msg, iconClass) {
+            let alert = document.getElementById('alert')
+            alert.children[0].innerHTML = msg;
+            alert.className = "alert alert-" + type;
+            alert.children[1].children[0].className = "fa " + iconClass;
+            alert.style.display = 'block';
+            setTimeout(() => alert.classList.add('fadeOut'), 2000);
+            setTimeout(() => alert.style.display = 'none', 3000);
         }
-        function startLoading(){
-            document.getElementById('loading').style.display="flex";
+        let contacts = [{
+            "id": "0",
+            "name": "Aman Jain",
+            "email": "amanpatniajmer@gmail.com"
+        }, {
+            "id": "1",
+            "name": "Aanchal Jain",
+            "email": "aanchal.jain.eee19@itbhu.ac.in"
+        }];
+
+        function stopLoading() {
+            document.getElementById('loading').style.display = "none";
+        }
+
+        function startLoading() {
+            document.getElementById('loading').style.display = "flex";
             console.log('loading')
         }
-        let addContactForm=document.getElementById('addContactForm');
-        addContactForm.onsubmit=function(e){
+
+        updateContactsList(contacts, "contactsList");
+
+        let addContactForm = document.getElementById('addContactForm');
+        addContactForm.onsubmit = function(e) {
             e.preventDefault();
-            console.log("Contact Saved");
+            showAlert("success", "Contact Saved", "fa-check");
             startLoading();
-            setTimeout(stopLoading,2000);
-            const newContact=formToJSON(e.target);
+            setTimeout(stopLoading, 1000);
+            const newContact = formToJSON(e.target);
             contacts.push(newContact);
-            updateContactsList(contacts,'contactsList');
+            updateContactsList(contacts, 'contactsList');
             addContactForm.reset();
-        }        
-        let closeBtn=document.getElementById('close');
-        closeBtn.onclick=function(){
-            document.getElementById('modal').style.display='none';
         }
-        let newContactBtn=document.getElementById('addContact');
-        newContactBtn.onclick=function(){
-            document.getElementById('modal').style.display='block';
+        document.getElementById('addContactClose').onclick = () => closeModal('addContactModal');
+        let newContactBtn = document.getElementById('addContact');
+        newContactBtn.onclick = function() {
+            document.getElementById('addContactModal').style.display = 'block';
         }
+
+        document.getElementById('editContactClose').onclick = () => closeModal('editContactModal');
+        let editIndex = null;
+
+        function editContact(index) {
+            editIndex = index;
+            document.getElementById('editContactModal').style.display = 'block';
+            let form = document.getElementById('editContactForm');
+            for (let key in contacts[index]) {
+                if (!form.elements.hasOwnProperty(key)) continue;
+                form.elements[key].value = contacts[index][key];
+            }
+        }
+        let editContactForm = document.getElementById('editContactForm');
+        editContactForm.onsubmit = function(e) {
+            e.preventDefault();
+            showAlert("success", "Successfully edited contact", "fa-check");
+            startLoading();
+            setTimeout(stopLoading, 2000);
+            const newContact = formToJSON(e.target);
+            contacts[editIndex] = newContact;
+            updateContactsList(contacts, 'contactsList');
+            addContactForm.reset();
+            editIndex = null;
+        }
+
+        function deleteContact(index) {
+            contacts.splice(index, 1);
+            showAlert("success", "Successfully Deleted!", "fa-check")
+            updateContactsList(contacts, 'contactsList');
+        }
+
         function setCallee(callee) {
             localStorage.setItem("callee", callee)
         }
-        updateContactsList(contacts, "contactsList");
-        function searchContacts(val){
+
+        function searchContacts(val) {
             updateContactsList(filter(contacts, val), "contactsList");
         }
     </script>
+
 </body>
 
 </html>
