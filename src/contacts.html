@@ -66,30 +66,32 @@
         </div>
         <div id="addContactModal" class="modal">
             <div class="modalBox border-radius">
-                <button class="right-align btn-danger" id="addContactClose"><i class="fa fa-close"></i></button>
-                <h1>Add new Contact</h1>
-                <form id="addContactForm">
-                    <label>Enter Contact name:</label>
-                    <input type="text" name="name" />
-                    <label>Enter Contact email:</label>
-                    <input type="email" name="email" />
-                    <div class="text-center"><button type="submit" class="btn-success">Add <i
+                <h1>Add new Contact <button class="right-align btn-danger" id="addContactClose"><i class="fa fa-close"></i></button></h1>
+                <div class="content">
+                    <form id="addContactForm">
+                        <label>Enter Contact name:</label>
+                        <input type="text" name="name" />
+                        <label>Enter Contact email:</label>
+                        <input type="email" name="email" />
+                        <div class="text-center"><button type="submit" class="btn-success">Add <i
                                 class="fa fa-plus-circle"></i></button></div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
         <div id="editContactModal" class="modal">
             <div class="modalBox border-radius">
-                <button class="right-align btn-danger" id="editContactClose"><i class="fa fa-close"></i></button>
-                <h1>Edit Contact</h1>
-                <form id="editContactForm">
-                    <label>Edit contact name:</label>
-                    <input type="text" name="name" />
-                    <label>Edit contact email:</label>
-                    <input type="email" name="email" />
-                    <div class="text-center"><button type="submit" class="btn-success">Edit <i
+                <h1>Edit Contact <button class="right-align btn-danger" id="editContactClose"><i class="fa fa-close"></i></button></h1>
+                <div class="content">
+                    <form id="editContactForm">
+                        <label>Edit contact name:</label>
+                        <input type="text" name="name" />
+                        <label>Edit contact email:</label>
+                        <input type="email" name="email" />
+                        <div class="text-center"><button type="submit" class="btn-success">Edit <i
                                 class="fa fa-pencil"></i></button></div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -174,6 +176,7 @@
 
         function setCallee(callee) {
             localStorage.setItem("callee", callee)
+            window.location.href = "./videoCall.html";
         }
 
         function searchContacts(val) {

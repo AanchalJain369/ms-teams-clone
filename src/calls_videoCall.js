@@ -36,11 +36,8 @@ function updateParticipants(participants) {
                     <span class='name'>" +
             participants[i].name +
             "</span>\
-                </div>\
-                <div>\
-                <button onclick='pinToScreen(\"" +
-            participants[i].id +
-            "\")'><i class='fa fa-thumb-tack'></i></button>\
+                </div></div>\
+                <div class='lower'>\
                     <button onclick='removeParticipant(\"" +
             participants[i].id +
             "\")'>Remove <i class='fa fa-close'></i> </button>\
@@ -52,19 +49,23 @@ function updateParticipants(participants) {
     document.getElementById(id).innerHTML = contentAll;
 }
 
-function createRemoteVideo() {
+function createRemoteVideo(participant) {
     let videos = document.getElementById('videos');
     let i = videos.children.length - 1;
     if (i >= 3) return -1;
-    let newVideo = document.createElement('video');
-    newVideo.setAttribute('autoplay', true);
-    newVideo.id = 'remoteVideo' + i;
+    let newVideo = document.createElement('div');
+    newVideo.className = 'video';
+    newVideo.innerHTML = "<video id='remoteVideo" + i + "' autoplay></video>\
+    <div class='sub-controls'>\
+        <i class='fa fa-thumb-tack'></i>\
+    </div>\
+    <div class='name'>" + (participant.screen ? "(Presenting) " : "") + participant.name + "</div>";
     videos.appendChild(newVideo);
     return i;
 }
 
 function removeRemoteVideo(index, participants) {
-    document.getElementById('remoteVideo' + index).remove();
+    document.getElementById('videos').children[index + 1].remove();
     participants.splice(index + 1, 1);
     console.log(participants);
 }

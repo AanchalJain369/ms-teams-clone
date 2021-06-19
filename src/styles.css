@@ -39,8 +39,14 @@ body {
 
 /* Utility */
 
+button[type="submit"] {
+    margin-top: 10px;
+}
+
 label {
     font-size: 17px;
+    display: block;
+    margin-top: 10px;
 }
 
 .left-align {
@@ -250,12 +256,51 @@ button {
 /* video call */
 
 video {
-    height: 45%;
-    max-width: 45%;
+    max-width: 100%;
+    max-height: 100%;
     background-color: var(--light-color);
     border-radius: 5px;
     background-color: black;
+}
+
+.video {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 15;
+    height: 50%;
+    max-width: 45%;
     margin: 5px;
+}
+
+.video .sub-controls {
+    font-size: 18px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: white;
+    width: 25px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 50%;
+    margin: 2px;
+}
+
+.video .name {
+    position: absolute;
+    bottom: 30px;
+    font-weight: 500;
+    width: calc(100% - 10px);
+    font-size: 17px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    padding: 3px;
+    padding-left: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .video-controls {
@@ -290,7 +335,7 @@ video {
     display: flex;
     place-content: center;
     flex-wrap: wrap;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 140px);
     width: calc(100vw - 70px);
 }
 
@@ -314,14 +359,45 @@ video {
     box-shadow: 4px 5px 14px 2px rgb(25 23 23);
     margin: 15% auto;
     width: 300px;
-    padding: 20px;
+    max-height: 65vh;
+    overflow-x: scroll;
+    overflow-x: hidden;
     z-index: 996;
     background-color: var(--light-color);
+    border-radius: 10px;
+}
+
+.modalBox .content {
+    overflow: hidden;
+    border-radius: 10px;
+    padding: 0 20px 20px;
+    background-color: white;
+}
+
+.modalBox .contact-card {
+    background-color: white;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.modalBox h1 button {
+    width: 30px;
+    box-shadow: none;
+    margin-top: 5px;
+}
+
+.modalBox h1 {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 5px;
+    margin: 0;
+    border-radius: 5px;
 }
 
 .modalBox input {
     width: 90%;
     font-size: 16px;
+    background-color: var(--light-color);
 }
 
 
@@ -437,12 +513,14 @@ video {
     }
 }
 
-.dropdown ::-webkit-scrollbar {
+.dropdown ::-webkit-scrollbar,
+.modalBox::-webkit-scrollbar {
     width: 7px;
     background-color: var(--primary-color);
 }
 
-.dropdown ::-webkit-scrollbar-thumb {
+.dropdown ::-webkit-scrollbar-thumb,
+.modalBox::-webkit-scrollbar-thumb {
     border-radius: 10px;
     background-color: var(--dark-primary-color);
 }
