@@ -4,8 +4,10 @@ body {
 
 :root {
     --primary-color: #6666aa;
+    --dark-primary-color: #3b3b7a;
     --success-color: green;
     --danger-color: #ea4335;
+    --dark-danger-color: #e22121;
     --light-color: #efefef;
 }
 
@@ -24,6 +26,17 @@ body {
 }
 
 
+/* Text */
+
+.text-success {
+    color: var(--success-color);
+}
+
+.text-center {
+    text-align: center;
+}
+
+
 /* Utility */
 
 label {
@@ -38,38 +51,8 @@ label {
     float: right !important;
 }
 
-input:focus {
-    outline: none;
-    border-bottom: solid 3px var(--primary-color);
-}
-
-.text-success {
-    color: var(--success-color);
-}
-
-.text-center {
-    text-align: center;
-}
-
 .center {
     margin: auto;
-}
-
-input {
-    font-size: 20px;
-    padding: 10px;
-    border-radius: 3px;
-    border: hidden;
-    width: 90%;
-    margin: 2px 0 10px;
-}
-
-button {
-    outline: none;
-    border: none;
-    padding: 5px;
-    box-shadow: 4px 3px 5px 0px rgb(177 177 177);
-    cursor: pointer;
 }
 
 a {
@@ -87,9 +70,36 @@ a {
     display: inline-block;
 }
 
-.btn-danger {
-    color: white;
-    background-color: var(--danger-color);
+.border-radius {
+    border-radius: 5px;
+}
+
+
+/* input */
+
+input {
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 3px;
+    border: hidden;
+    width: 90%;
+    margin: 2px;
+}
+
+input:focus {
+    outline: none;
+    border-bottom: solid 3px var(--primary-color);
+}
+
+
+/* button */
+
+button {
+    outline: none;
+    border: none;
+    padding: 5px;
+    box-shadow: 4px 3px 5px 0px rgb(177 177 177);
+    cursor: pointer;
 }
 
 .btn-success {
@@ -97,9 +107,17 @@ a {
     background-color: var(--success-color);
 }
 
-.border-radius {
-    border-radius: 5px;
+.btn-danger {
+    color: white !important;
+    background-color: var(--danger-color) !important;
 }
+
+.btn-danger:hover {
+    background-color: var(--dark-danger-color) !important;
+}
+
+
+/* Main Content */
 
 .main-content {
     padding-left: 70px;
@@ -116,6 +134,12 @@ a {
     box-shadow: inset 0px 0px 10px 1px rgb(23 22 22 / 77%);
 }
 
+.main-nav ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .main-nav li {
     padding: 10px;
 }
@@ -125,6 +149,7 @@ a {
 
 .sub-nav {
     box-shadow: -8px 6px 20px 4px rgb(177 177 177);
+    margin-left: 45px;
 }
 
 .sub-nav ul {
@@ -150,10 +175,9 @@ a {
 /* Side Nav */
 
 .side-nav {
-    margin-top: 65px;
     width: 50px;
     background-color: rgb(224, 215, 215);
-    height: 100vh;
+    height: 100%;
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -179,6 +203,10 @@ a {
 
 /* Calls History contact card */
 
+#contactsList {
+    margin: 5px;
+}
+
 .contact-card {
     padding: 10px;
     box-shadow: 1px 0px 5px 0px rgb(177 177 177);
@@ -188,7 +216,7 @@ a {
     font-size: 18px;
     display: flex;
     justify-content: space-between;
-    padding-top: 15px;
+    padding-top: 10px;
     align-items: center;
 }
 
@@ -222,24 +250,48 @@ a {
 /* video call */
 
 video {
-    width: 800px;
+    height: 45%;
+    max-width: 45%;
     background-color: var(--light-color);
     border-radius: 5px;
-}
-
-#localVideo {
-    width: 300px;
+    background-color: black;
+    margin: 5px;
 }
 
 .video-controls {
-    width: 800px;
+    box-shadow: -3px 2px 5px 0px rgb(16 15 15);
+    padding: 5px;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    bottom: 20px;
+    width: calc(100vw - 116px);
+    left: 90px;
+    border-radius: 10px;
     z-index: 20;
-    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .video-controls button {
-    font-size: 25px;
-    margin: 5px;
+    color: white;
+    border-radius: 5px !important;
+    background-color: var(--primary-color);
+    font-size: 25px !important;
+    margin-right: 15px;
+    width: 50px;
+    box-shadow: none;
+}
+
+.video-controls button:hover {
+    background-color: var(--dark-primary-color);
+}
+
+#videos {
+    display: flex;
+    place-content: center;
+    flex-wrap: wrap;
+    height: calc(100vh - 100px);
+    width: calc(100vw - 70px);
 }
 
 
@@ -259,6 +311,7 @@ video {
 }
 
 .modalBox {
+    box-shadow: 4px 5px 14px 2px rgb(25 23 23);
     margin: 15% auto;
     width: 300px;
     padding: 20px;
@@ -308,6 +361,9 @@ video {
     }
 }
 
+
+/* alert box */
+
 .alert {
     display: none;
     z-index: 999;
@@ -340,4 +396,97 @@ video {
 .alert-danger {
     background-color: var(--danger-color);
     color: white;
+}
+
+
+/* dropdown menu */
+
+.dropdown {
+    position: relative;
+    z-index: 500;
+}
+
+.dropdown button {
+    font-size: 20px;
+    padding: 5px 10px;
+    border-radius: 2px;
+}
+
+.dropdown ul {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: none;
+    box-shadow: -5px 5px 13px 0px rgb(12 10 10);
+    animation: slide-down 600ms;
+    animation-fill-mode: forwards;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    position: absolute;
+    right: 0;
+    top: 37px;
+    height: 0;
+    color: white;
+    list-style: none;
+    margin: 0;
+    padding: 3px 0;
+}
+
+@keyframes slide-down {
+    to {
+        height: 138px;
+    }
+}
+
+.dropdown ::-webkit-scrollbar {
+    width: 7px;
+    background-color: var(--primary-color);
+}
+
+.dropdown ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--dark-primary-color);
+}
+
+.dropdown ul li {
+    padding: 5px 10px;
+    cursor: pointer;
+    border-bottom: 2px solid var(--dark-primary-color);
+}
+
+.dropdown ul li:hover {
+    background-color: var(--dark-primary-color);
+}
+
+
+/* reactions */
+
+#reactions {
+    display: none;
+    position: absolute;
+    bottom: 40px;
+    left: 0px;
+}
+
+#reactions button {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: yellow;
+    border-radius: 0 !important;
+}
+
+#reactions button:hover {
+    background-color: rgba(0, 0, 0, 1) !important;
+}
+
+
+/* Chotuuuu */
+
+.chotu-btn {
+    padding: 10px;
+    position: absolute;
+    top: 200px;
+    right: 50px;
+    background-color: var(--danger-color);
+    font-size: 20px;
+    border-radius: 5px;
+    box-shadow: 1px 4px 8px 0px rgb(147 128 128);
 }

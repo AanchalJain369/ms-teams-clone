@@ -103,15 +103,6 @@
     <script src="./utils.js"></script>
     <script src="./calls_contacts.js"></script>
     <script>
-        function showAlert(type, msg, iconClass) {
-            let alert = document.getElementById('alert')
-            alert.children[0].innerHTML = msg;
-            alert.className = "alert alert-" + type;
-            alert.children[1].children[0].className = "fa " + iconClass;
-            alert.style.display = 'block';
-            setTimeout(() => alert.classList.add('fadeOut'), 2000);
-            setTimeout(() => alert.style.display = 'none', 3000);
-        }
         let contacts = [{
             "id": "0",
             "name": "Aman Jain",
@@ -144,13 +135,13 @@
             updateContactsList(contacts, 'contactsList');
             addContactForm.reset();
         }
-        document.getElementById('addContactClose').onclick = () => closeModal('addContactModal');
+        document.getElementById('addContactClose').onclick = () => toggleVisibility('addContactModal', 'block');
         let newContactBtn = document.getElementById('addContact');
         newContactBtn.onclick = function() {
             document.getElementById('addContactModal').style.display = 'block';
         }
 
-        document.getElementById('editContactClose').onclick = () => closeModal('editContactModal');
+        document.getElementById('editContactClose').onclick = () => toggleVisibility('editContactModal', 'block');
         let editIndex = null;
 
         function editContact(index) {
@@ -171,7 +162,7 @@
             const newContact = formToJSON(e.target);
             contacts[editIndex] = newContact;
             updateContactsList(contacts, 'contactsList');
-            addContactForm.reset();
+            editContactForm.reset();
             editIndex = null;
         }
 

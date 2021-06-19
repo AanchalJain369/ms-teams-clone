@@ -1,3 +1,13 @@
+function showAlert(type, msg, iconClass) {
+    let alert = document.getElementById('alert')
+    alert.children[0].innerHTML = msg;
+    alert.className = "alert alert-" + type;
+    alert.children[1].children[0].className = "fa " + iconClass;
+    alert.style.display = 'block';
+    setTimeout(() => alert.classList.add('fadeOut'), 2000);
+    setTimeout(() => alert.style.display = 'none', 3000);
+}
+
 function getAvatar(name) {
     let avatar = name[0].toUpperCase();
     let index = name.indexOf(' ');
@@ -39,6 +49,9 @@ function JSONToForm(data) {
     return formData;
 }
 
-function closeModal(id) {
-    document.getElementById(id).style.display = 'none';
+function toggleVisibility(id, displayType) {
+    let element = document.getElementById(id);
+    if (element.style.display === '' | element.style.display === 'none') {
+        element.style.display = displayType;
+    } else element.style.display = 'none';
 }

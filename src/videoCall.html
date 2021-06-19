@@ -15,7 +15,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
 </head>
 
-<body>
+<body style="overflow: hidden;">
     <header>
         <nav class="main-nav nav">
             <ul>
@@ -30,42 +30,146 @@
     </header>
     <div>
         <div>
-            <div class="side-nav">
+            <div class="side-nav" style="height:  calc(100vh - 77px);">
                 <a>
                     <i class="fa fa-bell-o"></i>
                 </a>
                 <a>
                     <i class="fa fa-commenting-o"></i>
                 </a>
-                <a class="active">
+                <a class="active" href="../index.html">
                     <i class="fa fa-phone"></i>
                 </a>
             </div>
         </div>
 
         <div class="main-window">
-            <nav class="sub-nav nav">
-                <ul>
-                    <li>
-                        <h1><i class="fa fa-phone"></i> Name </h1>
-                    </li>
+            <div class="dropdown">
+                <button class="right-align" onclick="toggleVisibility('featuresDropdown', 'block')"><i
+                        class="fa fa-bars"></i></button>
+                <ul id="featuresDropdown">
+                    <li onclick="toggleVisibility('addParticipantsModal', 'block');">Add Participants</li>
+                    <li onclick="showParticipantsModal()">Show Participants</li>
+                    <li>Change Background</li>
+                    <li>Whiteboard</li>
+                    <li>Mute All</li>
+                    <li>Chat</li>
+                    <li onclick="addShareScreen()">Present Screen</li>
+                    <li>Full Screen</li>
                 </ul>
-            </nav>
-
-
+            </div>
             <div class="main-content">
-                <video id="remoteVideo" autoplay>
-                </video>
-                <div class="video-controls">
-                    <button><i class="fa fa-microphone-slash"></i></button>
-                    <button><i class="fa fa-video-camera"></i></button>
-                    <button class="btn-danger"><i class="fa fa-close"></i></button>
+                <div id="videos">
+                    <video id="localVideo" autoplay draggable="true" aria-data></video>
                 </div>
-                <video id="localVideo" autoplay draggable="true"></video>
             </div>
         </div>
     </div>
+    <div id="addParticipantsModal" class="modal">
+        <div class="modalBox border-radius">
+            <button class="right-align btn-danger" onclick="toggleVisibility('addParticipantsModal', 'block');"><i
+                    class="fa fa-close"></i></button>
+            <h1>Add Participants</h1>
+            <div id="addParticipantsList">
+
+            </div>
+        </div>
+    </div>
+    <div id="showParticipantsModal" class="modal">
+        <div class="modalBox border-radius">
+            <button class="right-align btn-danger" onclick="toggleVisibility('showParticipantsModal', 'block');"><i
+                    class="fa fa-close"></i></button>
+            <h1>Participants</h1>
+            <div id="participantsList">
+
+            </div>
+        </div>
+    </div>
+    <div class="video-controls">
+        <button><i class="fa fa-microphone-slash"></i></button>
+        <button><i class="fa fa-video-camera"></i></button>
+        <div class="dropdown">
+            <button onclick="toggleVisibility('reactions','block')"><i class="fa fa-smile-o"></i></button>
+            <div id="reactions">
+                <button><i class="fa fa-smile-o"></i></button>
+                <button><i class="fa fa-frown-o"></i></button>
+                <button><i class="fa fa-hand-paper-o"></i></button>
+                <button><i class="fa fa-thumbs-o-up"></i></button>
+                <button><i class="fa fa-thumbs-o-down"></i></button>
+            </div>
+        </div>
+        <button class="btn-danger"><i class="fa fa-close"></i></button>
+    </div>
+    <div id="alert" class="alert alert-danger">
+        <span>{msg}</span>
+        <span><i class="fa fa-check-circle"></i></span>
+    </div>
+    <script src="./utils.js"></script>
     <script src="videoCall.js"></script>
+    <script src="./calls_videoCall.js"></script>
+    <script>
+        let localVideo = document.getElementById('localVideo');
+        let videos = document.getElementById('videos');
+        videos.ondragover = (e) => allowDrop(e);
+        localVideo.ondragstart = (e) => drag(e);
+        videos.ondrop = (e) => drop(e);
+
+        function allowDrop(e) {
+            e.preventDefault();
+        }
+
+        function drag(e) {
+            e.dataTransfer.setData("Text", e.target.id);
+        }
+
+        function drop(e) {
+            let data = e.dataTransfer.getData("Text");
+            e.target.appendChild(document.getElementById(data));
+            e.preventDefault();
+        }
+
+        let connections = 1;
+        for (let i = 0; i < connections; i++) {
+
+        }
+        let contacts = [{
+            "id": "0",
+            "name": "Aman Jain",
+            "email": "amanpatniajmer@gmail.com"
+        }, {
+            "id": "1",
+            "name": "Aanchal Jain",
+            "email": "aanchal.jain.eee19@itbhu.ac.in"
+        }];
+        showAddParticipants('addParticipantsList');
+        let user = {
+            "id": "0",
+            "name": "Aanchal Jain",
+            "email": "aanchal.jain.eee19@itbhu.ac.in",
+            "screen": false
+        };
+        let participants = [user];
+        updateParticipants(participants);
+
+        function addShareScreen() {
+            let index = createRemoteVideo();
+            if (index === -1) {
+                showAlert("danger", "Cannot add more participants. Please remove one to continue.", "fa-close");
+                return;
+            }
+            participants[index + 1] = {
+                ...user,
+                "screen": true
+            }
+            shareScreen(index);
+        }
+
+        function showParticipantsModal() {
+            updateParticipants(participants);
+            toggleVisibility('showParticipantsModal', 'block');
+        }
+    </script>
+
 </body>
 
 </html>
