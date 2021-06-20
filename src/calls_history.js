@@ -3,24 +3,24 @@ function updateHistory(history, id) {
     for (let i = 0; i < history.length; i++) {
         let content = "<div class='contact-card'>\
                     <div class='upper'>\
-                        <div>\
-                            <div class='avatar'>" +
+                            <div class='avatar' style=\"background-color:" +
+            getAvatarColor(history[i].name) +
+            "\">" +
             getAvatar(history[i].name) +
             "</div>\
-                            <span class='name'>" +
+                            <div class='name'>" +
             history[i].name +
-            "</span>\
+            "</div>\
                         </div>\
-                        <div>\
-                            <button onclick='setCallee(\"" +
-            history[i].id +
-            "\")'><i class='fa fa-video-camera'></i></button>\
-                        </div>\
-                    </div>\
                     <div class='lower'>\
                         <span class='time'>" +
             history[i].start_time +
             "</span>\
+            <div>\
+                            <button onclick='setCallee(\"" +
+            history[i].id +
+            "\")'><i class='fa fa-video-camera'></i></button>\
+                        </div>\
                     </div>\
                 </div>";
         contentAll += content;

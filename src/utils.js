@@ -55,3 +55,12 @@ function toggleVisibility(id, displayType) {
         element.style.display = displayType;
     } else element.style.display = 'none';
 }
+
+function getAvatarColor(name) {
+    const colors = ["#058912", "#05ff12", "#058ee2"];
+    let sum = 0;
+    for (let i = 0; i < name.length; i++) sum += name.charCodeAt(i);
+    console.log(colors[sum % (colors.length)]);
+    return colors[sum % (colors.length)];
+
+}

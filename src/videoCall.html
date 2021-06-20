@@ -118,30 +118,33 @@
     <script src="videoCall.js"></script>
     <script src="./calls_videoCall.js"></script>
     <script>
-        let localVideo = document.getElementById('localVideo');
-        let videos = document.getElementById('videos');
-        videos.ondragover = (e) => allowDrop(e);
-        localVideo.ondragstart = (e) => drag(e);
-        videos.ondrop = (e) => drop(e);
+        /*
+                                let localVideo = document.getElementById('localVideo');
+                                let videos = document.getElementById('videos');
+                                videos.ondragover = (e) => allowDrop(e);
+                                localVideo.ondragstart = (e) => drag(e);
+                                videos.ondrop = (e) => drop(e);
 
-        function allowDrop(e) {
-            e.preventDefault();
-        }
+                                function allowDrop(e) {
+                                    e.preventDefault();
+                                }
 
-        function drag(e) {
-            e.dataTransfer.setData("Text", e.target.id);
-        }
+                                function drag(e) {
+                                    e.dataTransfer.setData("Text", e.target.id);
+                                }
 
-        function drop(e) {
-            let data = e.dataTransfer.getData("Text");
-            e.target.appendChild(document.getElementById(data));
-            e.preventDefault();
-        }
+                                function drop(e) {
+                                    let data = e.dataTransfer.getData("Text");
+                                    e.target.appendChild(document.getElementById(data));
+                                    e.preventDefault();
+                                }
 
-        let connections = 1;
-        for (let i = 0; i < connections; i++) {
+                                let connections = 1;
+                                for (let i = 0; i < connections; i++) {
 
-        }
+                                }
+                         */
+
         let contacts = [{
             "id": "0",
             "name": "Aman Jain",
@@ -159,7 +162,6 @@
             "screen": false
         };
         let participants = [user];
-        updateParticipants(participants);
 
         function addShareScreen() {
             let participant = {

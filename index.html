@@ -14,75 +14,65 @@
 
 <body>
     <header>
-        <nav class="main-nav nav">
-            <ul>
-                <li class="left-align"><input type="text" name="search" placeholder="Search"></li>
-                <li class="right-align">
-                    <div class="avatar">
-                        AJ
-                    </div>
-                </li>
-            </ul>
-        </nav>
+
     </header>
     <div>
-        <div>
-            <div class="side-nav">
-                <a>
-                    <i class="fa fa-bell-o"></i>
-                </a>
-                <a>
-                    <i class="fa fa-commenting-o"></i>
-                </a>
-                <a class="active">
-                    <i class="fa fa-phone"></i>
-                </a>
-            </div>
+        <div class="side-nav">
+            <a>
+                <i class="fa fa-bell-o"></i>
+            </a>
+            <a>
+                <i class="fa fa-commenting-o"></i>
+            </a>
+            <a href="./src/contacts.html">
+                <i class="fa fa-phone"></i>
+            </a>
+            <a class="active">
+                <i class="fa fa-history"></i>
+            </a>
         </div>
 
         <div class="main-window">
-            <nav class="sub-nav nav">
+            <nav class="main-nav nav">
                 <ul>
-                    <li>
-                        <h1><i class="fa fa-phone"></i> Calls</h1>
+                    <h1>Meeting App</h1>
+                    <li class="right-align">
+                        <div class="avatar">
+                            AJ
+                        </div>
                     </li>
-                    <li class="active"><a>Phone</a></li>
-                    <li><a href="src/contacts.html">Contacts</a></li>
                 </ul>
             </nav>
-
-
-            <div>
-                <div class="history">
-                    <h1>Recents</h1>
+            <div class="history">
+                <div class="tab-heading">Recents</div>
+                <div class="tab">
                     <input type="text" name="search" placeholder="Type a name" onkeyup="searchLogs(this.value)">
                     <div id="history">
 
                     </div>
-                    </div>
+                </div>
             </div>
         </div>
     </div>
     <script>
         function setCallee(callee) {
             localStorage.setItem("callee", callee);
-            window.location.href="src/videoCall.html"
+            window.location.href = "src/videoCall.html"
         }
-        const history=[{
-            "name":"Aman Jain",
-            "start_time":"2:00",
-            "duration":"12:00:00"
-        },{
-            "name":"Aanchal Jain",
-            "start_time":"4:00:00",
-            "duration":"5:00:00"
+        const history = [{
+            "name": "Aman Jain",
+            "start_time": "2:00",
+            "duration": "12:00:00"
+        }, {
+            "name": "Aanchal Jain",
+            "start_time": "4:00:00",
+            "duration": "5:00:00"
         }];
         updateHistory(history, "history");
-        function searchLogs(val){
+
+        function searchLogs(val) {
             updateHistory(filter(history, val), "history");
         }
-        
-
     </script>
 </body>
 

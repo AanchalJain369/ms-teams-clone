@@ -3,15 +3,14 @@ function updateContactsList(contacts, id) {
     for (let i = 0; i < contacts.length; i++) {
         let content = "<div class='contact-card'>\
                     <div class='upper'>\
-                        <div>\
                             <div class='avatar'>" +
             getAvatar(contacts[i].name) +
             "</div>\
-                            <span class='name'>" +
+                            <div class='name'>" +
             contacts[i].name +
-            "</span>\
+            "</div>\
                         </div>\
-                        <div>\
+                        <div class='lower'>\
                             <button onclick='setCallee(\"" +
             contacts[i].id +
             "\")'><i class='fa fa-video-camera'></i></button>\
@@ -22,7 +21,6 @@ function updateContactsList(contacts, id) {
             i +
             "\")'><i class='fa fa-trash'></i></button>\
                         </div>\
-                    </div>\
                 </div>";
         contentAll += content;
     }

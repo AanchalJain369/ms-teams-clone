@@ -1,5 +1,11 @@
+@import url("https://fonts.googleapis.com/css?family=Imprima");
 body {
     margin: 0;
+    font-family: Imprima;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 :root {
@@ -39,10 +45,6 @@ body {
 
 /* Utility */
 
-button[type="submit"] {
-    margin-top: 10px;
-}
-
 label {
     font-size: 17px;
     display: block;
@@ -67,11 +69,12 @@ a {
 }
 
 .avatar {
-    background-color: rgb(241, 217, 227);
+    background-color: white;
+    border: 1px solid rgba(177, 177, 177, 0.7);
     padding: 7px 10px 7px 10px;
     border-radius: 100%;
     line-height: 1.5em;
-    width: 20px;
+    width: 40px;
     text-align: center;
     display: inline-block;
 }
@@ -122,6 +125,10 @@ button {
     background-color: var(--dark-danger-color) !important;
 }
 
+button[type="submit"] {
+    margin-top: 10px;
+}
+
 
 /* Main Content */
 
@@ -130,14 +137,43 @@ button {
     padding-top: 20px;
 }
 
+.main-window {
+    margin-left: 50px;
+}
+
 
 /* Main Nav */
 
 .main-nav {
-    background-color: var(--primary-color);
+    /* background-color: rgba(177, 177, 177, 0.1); */
+    background-color: #ecae27;
+    width: 90%;
+    margin: auto;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    box-shadow: 3px 6px 7px 0px rgb(177 177 177);
     font-size: 20px;
-    line-height: 1.5em;
-    box-shadow: inset 0px 0px 10px 1px rgb(23 22 22 / 77%);
+    margin-bottom: 50px;
+}
+
+.tab-heading {
+    background-color: var(--primary-color);
+    color: white;
+    display: inline;
+    padding: 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.tab {
+    border: 1px solid rgba(177, 177, 177, 1.8);
+    overflow: hidden;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+.main-nav h1 {
+    margin: 0;
 }
 
 .main-nav ul {
@@ -182,10 +218,12 @@ button {
 
 .side-nav {
     width: 50px;
-    background-color: rgb(224, 215, 215);
+    background-color: var(--primary-color);
     height: 100%;
-    position: absolute;
+    top: 0;
+    position: fixed;
     display: flex;
+    justify-content: center;
     flex-direction: column;
     font-size: 30px;
     align-items: center;
@@ -194,7 +232,7 @@ button {
 
 .side-nav a {
     margin-bottom: 20px;
-    color: rgb(75, 75, 75);
+    color: rgb(0, 0, 0);
     padding: 10px;
 }
 
@@ -216,24 +254,43 @@ button {
 .contact-card {
     padding: 10px;
     box-shadow: 1px 0px 5px 0px rgb(177 177 177);
+    width: 100%;
+    margin-bottom: 5px;
+    border-radius: 7px;
 }
 
 .contact-card .upper {
     font-size: 18px;
-    display: flex;
-    justify-content: space-between;
-    padding-top: 10px;
     align-items: center;
+    white-space: nowrap;
+    width: 100%;
+    display: flex;
 }
 
-.contact-card .upper button {
-    padding: 6px;
+.contact-card .name {
+    width: 90%;
+    margin-left: 3px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.contact-card .lower button {
+    padding: 6px 12px;
     font-size: 16px;
     margin-right: 5px;
+    border-radius: 5px;
+    background-color: rgba(177, 177, 177, 0.5);
 }
 
 .contact-card .lower {
     padding-left: 40px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.contact-card .lower>* {
+    margin-left: 5px;
 }
 
 .contact-card .time {
@@ -247,9 +304,18 @@ button {
 }
 
 .history input {
-    background-color: rgb(218, 216, 216);
-    color: black;
+    font-size: medium;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 5px;
+    width: 100%;
     box-shadow: 4px 3px 5px 0px rgb(177 177 177);
+    margin: 0 2px 20px 0;
+}
+
+.history input::placeholder {
+    color: white;
+    opacity: 0.5;
 }
 
 
