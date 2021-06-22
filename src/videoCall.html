@@ -27,7 +27,7 @@
             <a>
                 <i class="fa fa-commenting-o"></i>
             </a>
-            <a href="./src/contacts.html">
+            <a href="./contacts.html">
                 <i class="fa fa-phone"></i>
             </a>
             <a class="active">
@@ -68,7 +68,7 @@
                         <i class="fa fa-thumb-tack"></i>
                     </div>
                     <div class="name">
-                        Aanchal Jain
+
                     </div>
                 </div>
             </div>
@@ -119,32 +119,33 @@
     <script src="videoCall.js"></script>
     <script src="./calls_videoCall.js"></script>
     <script>
-        /*
-                                                                        let localVideo = document.getElementById('localVideo');
-                                                                        let videos = document.getElementById('videos');
-                                                                        videos.ondragover = (e) => allowDrop(e);
-                                                                        localVideo.ondragstart = (e) => drag(e);
-                                                                        videos.ondrop = (e) => drop(e);
+        document.getElementsByClassName('video')[0].getElementsByClassName('name')[0].innerText = localStorage.getItem('name');
+        /* 
+        let localVideo = document.getElementById('localVideo');
+        let videos = document.getElementById('videos');
+        videos.ondragover = (e) => allowDrop(e);
+        localVideo.ondragstart = (e) => drag(e);
+        videos.ondrop = (e) => drop(e);
 
-                                                                        function allowDrop(e) {
-                                                                            e.preventDefault();
-                                                                        }
+        function allowDrop(e) {
+            e.preventDefault();
+        }
 
-                                                                        function drag(e) {
-                                                                            e.dataTransfer.setData("Text", e.target.id);
-                                                                        }
+        function drag(e) {
+            e.dataTransfer.setData("Text", e.target.id);
+        }
 
-                                                                        function drop(e) {
-                                                                            let data = e.dataTransfer.getData("Text");
-                                                                            e.target.appendChild(document.getElementById(data));
-                                                                            e.preventDefault();
-                                                                        }
+        function drop(e) {
+            let data = e.dataTransfer.getData("Text");
+            e.target.appendChild(document.getElementById(data));
+            e.preventDefault();
+        }
 
-                                                                        let connections = 1;
-                                                                        for (let i = 0; i < connections; i++) {
+        let connections = 1;
+        for (let i = 0; i < connections; i++) {
 
-                                                                        }
-                                                                 */
+        }
+*/
 
         let contacts = [{
             "id": "0",

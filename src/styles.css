@@ -111,6 +111,10 @@ button {
     cursor: pointer;
 }
 
+.btn:hover {
+    transform: scale(1.1);
+}
+
 .btn-success {
     color: white;
     background-color: var(--success-color);
@@ -119,6 +123,15 @@ button {
 .btn-danger {
     color: white !important;
     background-color: var(--danger-color) !important;
+}
+
+.btn-primary {
+    color: white !important;
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--dark-primary-color) !important;
 }
 
 .btn-danger:hover {
@@ -158,18 +171,19 @@ button[type="submit"] {
 
 .tab-heading {
     background-color: var(--primary-color);
+    display: inline-block;
     color: white;
-    display: inline;
-    padding: 5px;
+    padding: 10px 30px 10px 30px;
+    font-size: 18px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
 
 .tab {
     border: 1px solid rgba(177, 177, 177, 1.8);
-    overflow: hidden;
     padding: 10px;
     border-radius: 3px;
+    margin-bottom: 50px;
 }
 
 .main-nav h1 {
@@ -281,7 +295,6 @@ button[type="submit"] {
     font-size: 16px;
     margin-right: 5px;
     border-radius: 5px;
-    background-color: rgba(168, 116, 116, 0.5);
 }
 
 .contact-card .lower {
@@ -300,8 +313,18 @@ button[type="submit"] {
 }
 
 .history {
-    width: 300px;
+    width: 80%;
     margin: auto;
+}
+
+.filters {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.filters button {
+    font-size: 16px;
 }
 
 .history input {

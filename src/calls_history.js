@@ -17,7 +17,7 @@ function updateHistory(history, id) {
             history[i].start_time +
             "</span>\
             <div>\
-                            <button onclick='setCallee(\"" +
+                            <button class='btn' onclick='setCallee(\"" +
             history[i].id +
             "\")'><i class='fa fa-video-camera'></i></button>\
                         </div>\

@@ -15,15 +15,15 @@ function updateContactsList(contacts, id) {
                         <div class='lower'>\
                             <div></div>\
             <div>\
-            <button onclick='setCallee(\"" +
+            <button class='btn' onclick='setCallee(\"" +
             contacts[i].id +
             "\")'><i class='fa fa-video-camera'></i></button>\
-            <button onclick='editContact(\"" +
+            <button class='btn' onclick='editContact(" +
             i +
-            "\")'><i class='fa fa-pencil'></i></button>\
-            <button onclick='deleteContact(\"" +
+            ")'><i class='fa fa-pencil'></i></button>\
+            <button class='btn' onclick='deleteContact(" +
             i +
-            "\")'><i class='fa fa-trash'></i></button>\
+            ")'><i class='fa fa-trash'></i></button>\
                         </div>\
                         </div>\
                 </div>";

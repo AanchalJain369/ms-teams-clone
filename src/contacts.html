@@ -44,7 +44,10 @@
             <div class="history">
                 <div class="tab-heading">Contacts</div>
                 <div class="tab">
-                    <input type="text" name="search" placeholder="Type a name" onkeyup="searchLogs(this.value)">
+                    <input type="text" name="search" placeholder="Type a name" onkeyup="searchContacts(this.value)">
+                    <div class="filters">
+                        <button class="btn-primary border-radius" id="addContact"><i class="fa fa-plus-circle"></i> Add new Contact</button>
+                    </div>
                     <div id="contactsList">
 
                     </div>

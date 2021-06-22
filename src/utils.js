@@ -60,7 +60,6 @@ function getAvatarColor(name) {
     const colors = ["#64DFDF", "#F9F871", "#F48B29", "#FB3640", "#E93B81", "#F5ABC9", "#FBC6A4", "#FF8882", "#51C4D3"];
     let sum = 0;
     for (let i = 0; i < name.length; i++) sum += name.charCodeAt(i);
-    console.log(colors[sum % (colors.length)]);
     return colors[sum % (colors.length)];
 
 }

@@ -5,6 +5,7 @@ let connection = null;
 let localStream = null;
 let remoteStream = null;
 let remoteId = null;
+let roomDB = null;
 var firebaseConfig = {
     apiKey: "AIzaSyAoThvyDnMKikCSZTzd00zp0_03lekKgGs",
     authDomain: "ms-teams-clone-3687d.firebaseapp.com",
@@ -61,16 +62,11 @@ async function call() {
         }
 
         console.log(room)
-        const roomDB = await db.collection('rooms').add(room);
+        roomDB = await db.collection('rooms').add(room);
         roomID = roomDB.id;
         console.log(roomID);
 
-        console.log("Adding IceCandidatesto DB", iceCandidates.length)
-        const candidatesCollection = roomDB.collection(localStorage.getItem('id'));
-        while (iceCandidates.length) {
-            candidatesCollection.add(iceCandidates.pop());
-        }
-        console.log("remaining", iceCandidates.length);
+        addIceCandidates();
 
         /* connection.addEventListener('track', e => {
             console.log(e.streams[0])
@@ -103,7 +99,7 @@ async function startMedia() {
 }
 async function joinRoom(roomID) {
     const db = firebase.firestore();
-    let roomDB = await db.collection('rooms').doc(roomID);
+    roomDB = await db.collection('rooms').doc(roomID);
     roomDB.get().then(async(doc) => {
         if (doc.exists) {
             const offer = doc.data().offer;
@@ -111,7 +107,8 @@ async function joinRoom(roomID) {
             connection = new RTCPeerConnection(RTCconfig);
             registerPeerConnectionListeners(connection);
             await startMedia();
-            await connection.setRemoteDescription(offer);
+
+            await connection.setRemoteDescription(new RTCSessionDescription(offer));
 
             const answer = await connection.createAnswer();
 
@@ -125,12 +122,7 @@ async function joinRoom(roomID) {
                 }
             }
             console.log(room)
-            console.log("Adding IceCandidatesto DB", iceCandidates.length)
-            const candidatesCollection = roomDB.collection(localStorage.getItem('id'));
-            while (iceCandidates.length) {
-                candidatesCollection.add(iceCandidates.pop());
-            }
-            console.log("remaining", iceCandidates.length);
+            addIceCandidates();
 
             await roomDB.set(room);
             await collectIceCandidates(roomDB, connection, localStorage.getItem("id"), offer.id);
@@ -175,6 +167,16 @@ function onAddIceCandidate(event, candidatesCollection) {
         iceCandidates.push(json);
         console.log("iceCandidate", json);
     }
+    if (roomDB) addIceCandidates();
+}
+
+function addIceCandidates() {
+    console.log("Adding IceCandidatesto DB", iceCandidates.length)
+    const candidatesCollection = roomDB.collection(localStorage.getItem('id'));
+    while (iceCandidates.length) {
+        candidatesCollection.add(iceCandidates.pop());
+    }
+    console.log("remaining", iceCandidates.length);
 }
 
 function registerPeerConnectionListeners(peerConnection) {
@@ -185,18 +187,28 @@ function registerPeerConnectionListeners(peerConnection) {
     });
 
     peerConnection.addEventListener('connectionstatechange', () => {
-        console.log(`Connection state change: ${peerConnection.connectionState}`);
+        switch (peerConnection.connectionState) {
+            case 'connected':
+                onConnectionStateChange();
+
+        }
+        console.log(`Connection state change: ${peerConnection.connectionState}`, peerConnection);
     });
 
     peerConnection.addEventListener('signalingstatechange', () => {
         switch (peerConnection.signalingState) {
             case "stable":
-                onConnectionStateChange();
+                /* onConnectionStateChange(); */
         }
         console.log(`Signaling state change: ${peerConnection.signalingState}`);
     });
 
     peerConnection.addEventListener('iceconnectionstatechange ', () => {
+        switch (peerConnection.iceConnectionState) {
+            case 'complete':
+                break;
+
+        }
         console.log(
             `ICE connection state change: ${peerConnection.iceConnectionState}`);
     });
