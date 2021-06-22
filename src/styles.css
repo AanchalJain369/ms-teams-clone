@@ -241,7 +241,8 @@ button[type="submit"] {
 }
 
 .side-nav a.active {
-    border-left: solid 4px var(--primary-color);
+    color: white;
+    border-left: 4px solid white;
 }
 
 
@@ -280,7 +281,7 @@ button[type="submit"] {
     font-size: 16px;
     margin-right: 5px;
     border-radius: 5px;
-    background-color: rgba(177, 177, 177, 0.5);
+    background-color: rgba(168, 116, 116, 0.5);
 }
 
 .contact-card .lower {
@@ -357,7 +358,7 @@ video {
     position: absolute;
     bottom: 30px;
     font-weight: 500;
-    width: calc(100% - 10px);
+    width: 100%;
     font-size: 17px;
     color: white;
     background-color: rgba(0, 0, 0, 0.4);
@@ -401,8 +402,9 @@ video {
     display: flex;
     place-content: center;
     flex-wrap: wrap;
-    height: calc(100vh - 140px);
-    width: calc(100vw - 70px);
+    align-items: center;
+    height: calc(100vh - 180px);
+    margin-left: 40px;
 }
 
 
@@ -545,6 +547,7 @@ video {
 
 .dropdown {
     position: relative;
+    top: -25px;
     z-index: 500;
 }
 
@@ -619,6 +622,10 @@ video {
 
 #reactions button:hover {
     background-color: rgba(0, 0, 0, 1) !important;
+}
+
+.video-controls .dropdown {
+    top: 0px;
 }
 
 

@@ -12,16 +12,7 @@
 
 <body>
     <header>
-        <nav class="main-nav nav">
-            <ul>
-                <li class="left-align"><input type="text" name="search" placeholder="Search"></li>
-                <li class="right-align">
-                    <div class="avatar">
-                        AJ
-                    </div>
-                </li>
-            </ul>
-        </nav>
+
     </header>
     <div>
         <div class="side-nav">
@@ -34,64 +25,60 @@
             <a class="active">
                 <i class="fa fa-phone"></i>
             </a>
+            <a href="../index.html">
+                <i class="fa fa-history"></i>
+            </a>
+        </div>
+
+        <div class="main-window">
+            <nav class="main-nav nav">
+                <ul>
+                    <h1>Meeting App</h1>
+                    <li class="right-align">
+                        <div class="avatar">
+                            AJ
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="history">
+                <div class="tab-heading">Contacts</div>
+                <div class="tab">
+                    <input type="text" name="search" placeholder="Type a name" onkeyup="searchLogs(this.value)">
+                    <div id="contactsList">
+
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="main-window">
-        <nav class="sub-nav nav">
-            <ul>
-                <li>
-                    <h1><i class="fa fa-phone"></i> Calls</h1>
-                </li>
-                <li><a href="../index.html">Phone</a></li>
-                <li class="active"><a>Contacts</a></li>
-            </ul>
-        </nav>
-
-
-        <div>
-            <div class="history">
-                <h1>Contacts</h1>
-                <button class="btn-success border-radius right-align" id="addContact">
-                    Add New Contact
-                    <i class="fa fa-plus-circle"></i>
-                </button>
-                <br />
-                <br />
-                <input type="text" name="search" placeholder="Type a name" onkeyup="searchContacts(this.value)">
-                <div id="contactsList">
-
-                </div>
-            </div>
-        </div>
-        <div id="addContactModal" class="modal">
-            <div class="modalBox border-radius">
-                <h1>Add new Contact <button class="right-align btn-danger" id="addContactClose"><i class="fa fa-close"></i></button></h1>
-                <div class="content">
-                    <form id="addContactForm">
-                        <label>Enter Contact name:</label>
-                        <input type="text" name="name" />
-                        <label>Enter Contact email:</label>
-                        <input type="email" name="email" />
-                        <div class="text-center"><button type="submit" class="btn-success">Add <i
+    <div id="addContactModal" class="modal">
+        <div class="modalBox border-radius">
+            <h1>Add new Contact <button class="right-align btn-danger" id="addContactClose"><i class="fa fa-close"></i></button></h1>
+            <div class="content">
+                <form id="addContactForm">
+                    <label>Enter Contact name:</label>
+                    <input type="text" name="name" />
+                    <label>Enter Contact email:</label>
+                    <input type="email" name="email" />
+                    <div class="text-center"><button type="submit" class="btn-success">Add <i
                                 class="fa fa-plus-circle"></i></button></div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
-        <div id="editContactModal" class="modal">
-            <div class="modalBox border-radius">
-                <h1>Edit Contact <button class="right-align btn-danger" id="editContactClose"><i class="fa fa-close"></i></button></h1>
-                <div class="content">
-                    <form id="editContactForm">
-                        <label>Edit contact name:</label>
-                        <input type="text" name="name" />
-                        <label>Edit contact email:</label>
-                        <input type="email" name="email" />
-                        <div class="text-center"><button type="submit" class="btn-success">Edit <i
+    </div>
+    <div id="editContactModal" class="modal">
+        <div class="modalBox border-radius">
+            <h1>Edit Contact <button class="right-align btn-danger" id="editContactClose"><i class="fa fa-close"></i></button></h1>
+            <div class="content">
+                <form id="editContactForm">
+                    <label>Edit contact name:</label>
+                    <input type="text" name="name" />
+                    <label>Edit contact email:</label>
+                    <input type="email" name="email" />
+                    <div class="text-center"><button type="submit" class="btn-success">Edit <i
                                 class="fa fa-pencil"></i></button></div>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     </div>

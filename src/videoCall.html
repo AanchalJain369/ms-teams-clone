@@ -17,33 +17,36 @@
 
 <body style="overflow: hidden;">
     <header>
-        <nav class="main-nav nav">
-            <ul>
-                <li class="left-align"><input type="text" name="search" placeholder="Search"></li>
-                <li class="right-align">
-                    <div class="avatar">
-                        AJ
-                    </div>
-                </li>
-            </ul>
-        </nav>
+
     </header>
     <div>
-        <div>
-            <div class="side-nav" style="height:  calc(100vh - 77px);">
-                <a>
-                    <i class="fa fa-bell-o"></i>
-                </a>
-                <a>
-                    <i class="fa fa-commenting-o"></i>
-                </a>
-                <a class="active" href="../index.html">
-                    <i class="fa fa-phone"></i>
-                </a>
-            </div>
+        <div class="side-nav">
+            <a>
+                <i class="fa fa-bell-o"></i>
+            </a>
+            <a>
+                <i class="fa fa-commenting-o"></i>
+            </a>
+            <a href="./src/contacts.html">
+                <i class="fa fa-phone"></i>
+            </a>
+            <a class="active">
+                <i class="fa fa-history"></i>
+            </a>
         </div>
 
+
         <div class="main-window">
+            <nav class="main-nav nav">
+                <ul>
+                    <h1>Meeting App</h1>
+                    <li class="right-align">
+                        <div class="avatar">
+                            AJ
+                        </div>
+                    </li>
+                </ul>
+            </nav>
             <div class="dropdown">
                 <button class="right-align" onclick="toggleVisibility('featuresDropdown', 'block')"><i
                         class="fa fa-bars"></i></button>
@@ -58,16 +61,14 @@
                     <li>Full Screen</li>
                 </ul>
             </div>
-            <div class="main-content">
-                <div id="videos">
-                    <div class="video">
-                        <video id="localVideo" autoplay draggable="true" aria-data></video>
-                        <div class="sub-controls">
-                            <i class="fa fa-thumb-tack"></i>
-                        </div>
-                        <div class="name">
-                            AnchluAnchlu Anchlu Anchlu Anchlu Anchlu Anchlu Anchlu Anchlu
-                        </div>
+            <div id="videos">
+                <div class="video">
+                    <video id="localVideo" autoplay draggable="true" aria-data></video>
+                    <div class="sub-controls">
+                        <i class="fa fa-thumb-tack"></i>
+                    </div>
+                    <div class="name">
+                        Aanchal Jain
                     </div>
                 </div>
             </div>
@@ -119,31 +120,31 @@
     <script src="./calls_videoCall.js"></script>
     <script>
         /*
-                                let localVideo = document.getElementById('localVideo');
-                                let videos = document.getElementById('videos');
-                                videos.ondragover = (e) => allowDrop(e);
-                                localVideo.ondragstart = (e) => drag(e);
-                                videos.ondrop = (e) => drop(e);
+                                                                        let localVideo = document.getElementById('localVideo');
+                                                                        let videos = document.getElementById('videos');
+                                                                        videos.ondragover = (e) => allowDrop(e);
+                                                                        localVideo.ondragstart = (e) => drag(e);
+                                                                        videos.ondrop = (e) => drop(e);
 
-                                function allowDrop(e) {
-                                    e.preventDefault();
-                                }
+                                                                        function allowDrop(e) {
+                                                                            e.preventDefault();
+                                                                        }
 
-                                function drag(e) {
-                                    e.dataTransfer.setData("Text", e.target.id);
-                                }
+                                                                        function drag(e) {
+                                                                            e.dataTransfer.setData("Text", e.target.id);
+                                                                        }
 
-                                function drop(e) {
-                                    let data = e.dataTransfer.getData("Text");
-                                    e.target.appendChild(document.getElementById(data));
-                                    e.preventDefault();
-                                }
+                                                                        function drop(e) {
+                                                                            let data = e.dataTransfer.getData("Text");
+                                                                            e.target.appendChild(document.getElementById(data));
+                                                                            e.preventDefault();
+                                                                        }
 
-                                let connections = 1;
-                                for (let i = 0; i < connections; i++) {
+                                                                        let connections = 1;
+                                                                        for (let i = 0; i < connections; i++) {
 
-                                }
-                         */
+                                                                        }
+                                                                 */
 
         let contacts = [{
             "id": "0",

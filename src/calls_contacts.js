@@ -3,7 +3,9 @@ function updateContactsList(contacts, id) {
     for (let i = 0; i < contacts.length; i++) {
         let content = "<div class='contact-card'>\
                     <div class='upper'>\
-                            <div class='avatar'>" +
+                    <div class='avatar' style=\"background-color:" +
+            getAvatarColor(contacts[i].name) +
+            "\">" +
             getAvatar(contacts[i].name) +
             "</div>\
                             <div class='name'>" +
@@ -11,7 +13,9 @@ function updateContactsList(contacts, id) {
             "</div>\
                         </div>\
                         <div class='lower'>\
-                            <button onclick='setCallee(\"" +
+                            <div></div>\
+            <div>\
+            <button onclick='setCallee(\"" +
             contacts[i].id +
             "\")'><i class='fa fa-video-camera'></i></button>\
             <button onclick='editContact(\"" +
@@ -20,6 +24,7 @@ function updateContactsList(contacts, id) {
             <button onclick='deleteContact(\"" +
             i +
             "\")'><i class='fa fa-trash'></i></button>\
+                        </div>\
                         </div>\
                 </div>";
         contentAll += content;

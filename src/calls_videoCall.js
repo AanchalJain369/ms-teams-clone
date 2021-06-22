@@ -55,7 +55,7 @@ function createRemoteVideo(participant) {
     if (i >= 3) return -1;
     let newVideo = document.createElement('div');
     newVideo.className = 'video';
-    newVideo.innerHTML = "<video id='remoteVideo" + i + "' autoplay></video>\
+    newVideo.innerHTML = "<video id='remoteVideo" + i + "' autoplay playsinline></video>\
     <div class='sub-controls'>\
         <i class='fa fa-thumb-tack'></i>\
     </div>\
