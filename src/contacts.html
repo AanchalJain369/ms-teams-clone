@@ -8,6 +8,26 @@
     <title>MS Teams Clone</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyAoThvyDnMKikCSZTzd00zp0_03lekKgGs",
+        authDomain: "ms-teams-clone-3687d.firebaseapp.com",
+        projectId: "ms-teams-clone-3687d",
+        storageBucket: "ms-teams-clone-3687d.appspot.com",
+        messagingSenderId: "35666250286",
+        appId: "1:35666250286:web:b24086e604e7338629adbf",
+        measurementId: "G-0DKCPEVW7W"
+    };
+    firebase.initializeApp(firebaseConfig);
+</script>
 </head>
 
 <body>
@@ -16,6 +36,9 @@
     </header>
     <div>
         <div class="side-nav">
+            <div class="top">
+            </div>
+            <div class="mid">
             <a>
                 <i class="fa fa-bell-o"></i>
             </a>
@@ -25,9 +48,15 @@
             <a class="active">
                 <i class="fa fa-phone"></i>
             </a>
-            <a href="../index.html">
+            <a href="/index.html">
                 <i class="fa fa-history"></i>
             </a>
+            </div>
+            <div class="bottom">
+                <a href="#" onclick="logout()">
+                    <i class="fa fa-sign-out"></i>
+                </a>
+            </div>
         </div>
 
         <div class="main-window">
@@ -95,15 +124,21 @@
     <script src="./utils.js"></script>
     <script src="./calls_contacts.js"></script>
     <script>
-        let contacts = [{
-            "id": "0",
-            "name": "Aman Jain",
-            "email": "amanpatniajmer@gmail.com"
-        }, {
-            "id": "1",
-            "name": "Aanchal Jain",
-            "email": "aanchal.jain.eee19@itbhu.ac.in"
-        }];
+        startLoading();
+        document.onload=fetchContacts();
+        let contacts = [];
+        async function fetchContacts(){
+            const db=firebase.firestore();
+            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
+            usersDB.collection('contacts').get().then(async(querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    contacts.push({...doc.data(), id:doc.id});
+                });
+                console.log(contacts)
+                updateContactsList(contacts, 'contactsList');
+                setTimeout(stopLoading, 1);
+            }).catch((error)=>console.log(error));
+        }
 
         function stopLoading() {
             document.getElementById('loading').style.display = "none";
@@ -114,15 +149,22 @@
             console.log('loading')
         }
 
-        updateContactsList(contacts, "contactsList");
-
         let addContactForm = document.getElementById('addContactForm');
         addContactForm.onsubmit = function(e) {
             e.preventDefault();
-            showAlert("success", "Contact Saved", "fa-check");
             startLoading();
-            setTimeout(stopLoading, 1000);
             const newContact = formToJSON(e.target);
+
+            const db=firebase.firestore();
+            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
+            usersDB.collection("contacts")
+            .add(newContact)
+            .then((res)=>{
+                showAlert("success", "Contact Saved", "fa-check");
+                setTimeout(stopLoading, 1);
+            })
+            .catch((err)=>console.log(err));
+
             contacts.push(newContact);
             updateContactsList(contacts, 'contactsList');
             addContactForm.reset();
@@ -148,10 +190,17 @@
         let editContactForm = document.getElementById('editContactForm');
         editContactForm.onsubmit = function(e) {
             e.preventDefault();
-            showAlert("success", "Successfully edited contact", "fa-check");
             startLoading();
-            setTimeout(stopLoading, 2000);
             const newContact = formToJSON(e.target);
+            const db=firebase.firestore();
+            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
+            usersDB.collection("contacts").doc(contacts[editIndex].id)
+            .set(newContact)
+            .then((res)=>{
+                showAlert("success", "Successfully edited contact", "fa-check");
+                setTimeout(stopLoading, 1);
+            })
+            .catch((err)=>console.log(err));
             contacts[editIndex] = newContact;
             updateContactsList(contacts, 'contactsList');
             editContactForm.reset();
@@ -159,8 +208,17 @@
         }
 
         function deleteContact(index) {
+            startLoading();
+            const db=firebase.firestore();
+            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
+            usersDB.collection("contacts").doc(contacts[index].id)
+            .delete()
+            .then(()=>{
+                showAlert("success", "Successfully Deleted!", "fa-check")
+                setTimeout(stopLoading, 1);
+            })
+            .catch((err)=>console.log(err));
             contacts.splice(index, 1);
-            showAlert("success", "Successfully Deleted!", "fa-check")
             updateContactsList(contacts, 'contactsList');
         }
 

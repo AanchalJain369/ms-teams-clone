@@ -71,5 +71,13 @@ function getAvatarColor(name) {
     let sum = 0;
     for (let i = 0; i < name.length; i++) sum += name.charCodeAt(i);
     return hexToRGB(colors[sum % (colors.length)]);
+}
 
+function logout(){
+    firebase.auth().signOut().then(() => {
+        localStorage.removeItem('user');
+        location.href="/login.html";
+    }).catch((error) => {
+        console.log(error)
+    });
 }
