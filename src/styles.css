@@ -421,6 +421,10 @@ video {
     background-color: var(--dark-primary-color);
 }
 
+.video-controls .dropdown {
+    top: 0px;
+}
+
 #videos {
     display: flex;
     place-content: center;
@@ -647,8 +651,8 @@ video {
     background-color: rgba(0, 0, 0, 1) !important;
 }
 
-.video-controls .dropdown {
-    top: 0px;
+.fa.fa-video-camera-slash {
+    display: none;
 }
 
 

@@ -30,7 +30,7 @@
             <a href="./contacts.html">
                 <i class="fa fa-phone"></i>
             </a>
-            <a class="active">
+            <a href="../index.html">
                 <i class="fa fa-history"></i>
             </a>
         </div>
@@ -97,8 +97,11 @@
         </div>
     </div>
     <div class="video-controls">
-        <button><i class="fa fa-microphone-slash"></i></button>
-        <button><i class="fa fa-video-camera"></i></button>
+        <button onclick="toggleAudio()"><i class="fa fa-microphone"></i></button>
+        <button onclick="toggleVideo()">
+            <i class="fa fa-video-camera"></i>
+            <img class="fa fa-video-camera-slash" height="90%" src="https://img.icons8.com/material-outlined/24/ffffff/no-video--v1.png"/>
+        </button>
         <div class="dropdown">
             <button onclick="toggleVisibility('reactions','block')"><i class="fa fa-smile-o"></i></button>
             <div id="reactions">
@@ -145,7 +148,7 @@
         for (let i = 0; i < connections; i++) {
 
         }
-*/
+       */
 
         let contacts = [{
             "id": "0",

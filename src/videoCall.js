@@ -23,7 +23,7 @@ const RTCconfig = {
         urls: [
             'stun:stun1.l.google.com:19302',
             'stun:stun2.l.google.com:19302',
-        ],
+        ]
     }, ],
     iceCandidatePoolSize: 10
 };
@@ -138,12 +138,51 @@ if (roomID === '') {
 
 function onConnectionStateChange() {
     console.log(connection.connectionState);
-    let index = createRemoteVideo({ id: remoteId });
-
+    let index = -1;
+    for (let i = 0; i < participants.length; i++) {
+        if (participants[i]['id'] == remoteId) {
+            index = i;
+            break;
+        }
+    }
+    if (index == -1) {
+        let participant = { id: remoteId };
+        index = createRemoteVideo(participant);
+        if (index === -1) {
+            showAlert("danger", "Cannot add more participants. Please remove one to continue.", "fa-close");
+            return;
+        }
+        participants[index + 1] = participant;
+    }
     document.getElementById('remoteVideo' + index).srcObject = remoteStream;
     /*document.getElementById('remoteVideo' + index).playsInline = true;
     document.getElementById('remoteVideo' + index).muted = true; */
     console.log('Received and adding in remoteVideo' + index)
+}
+
+function toggleAudio() {
+    const microphone = document.getElementsByClassName('fa-microphone');
+    if (microphone.length > 0) document.getElementsByClassName('fa-microphone')[0].className = "fa fa-microphone-slash";
+    else document.getElementsByClassName('fa-microphone-slash')[0].className = 'fa fa-microphone';
+
+    localStream.getAudioTracks().forEach(
+        track => track.enabled = !track.enabled
+    );
+}
+
+function toggleVideo() {
+    const camera = document.querySelector('.video-controls i.fa.fa-video-camera')
+    if (camera.style.display !== 'none') {
+        camera.style.display = 'none';
+        document.querySelector('.video-controls .fa.fa-video-camera-slash').style.display = 'inline';
+    } else {
+        camera.style.display = 'inline';
+        document.querySelector('.video-controls .fa.fa-video-camera-slash').style.display = 'none';
+    }
+
+    localStream.getVideoTracks().forEach(
+        track => track.enabled = !track.enabled
+    );
 }
 async function shareScreen(index) {
     try {

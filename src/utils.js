@@ -56,10 +56,20 @@ function toggleVisibility(id, displayType) {
     } else element.style.display = 'none';
 }
 
+function hexToRGB(h) {
+    let r = 0,
+        g = 0,
+        b = 0;
+    r = "0x" + h[1] + h[2];
+    g = "0x" + h[3] + h[4];
+    b = "0x" + h[5] + h[6];
+    return "rgb(" + +r + "," + +g + "," + +b + ")";
+}
+
 function getAvatarColor(name) {
     const colors = ["#64DFDF", "#F9F871", "#F48B29", "#FB3640", "#E93B81", "#F5ABC9", "#FBC6A4", "#FF8882", "#51C4D3"];
     let sum = 0;
     for (let i = 0; i < name.length; i++) sum += name.charCodeAt(i);
-    return colors[sum % (colors.length)];
+    return hexToRGB(colors[sum % (colors.length)]);
 
 }
