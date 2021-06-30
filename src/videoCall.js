@@ -56,7 +56,7 @@ async function call() {
             offer: {
                 type: offer.type,
                 sdp: offer.sdp,
-                id: localStorage.getItem("id")
+                id: localStorage.getItem("uid")
             }
 
         }
@@ -79,7 +79,7 @@ async function call() {
                 console.log('Set remote description: ', data.answer);
                 const answer = new RTCSessionDescription(data.answer)
                 await connection.setRemoteDescription(answer);
-                await collectIceCandidates(roomDB, connection, localStorage.getItem("id"), data.answer.id);
+                await collectIceCandidates(roomDB, connection, localStorage.getItem("uid"), data.answer.id);
 
             }
         })
@@ -125,7 +125,7 @@ async function joinRoom(roomID) {
             addIceCandidates();
 
             await roomDB.set(room);
-            await collectIceCandidates(roomDB, connection, localStorage.getItem("id"), offer.id);
+            await collectIceCandidates(roomDB, connection, localStorage.getItem("uid"), offer.id);
             remoteId = offer.id;
         }
     })
@@ -158,6 +158,7 @@ function onConnectionStateChange() {
     /*document.getElementById('remoteVideo' + index).playsInline = true;
     document.getElementById('remoteVideo' + index).muted = true; */
     console.log('Received and adding in remoteVideo' + index)
+    return index;
 }
 
 function toggleAudio() {
@@ -211,7 +212,7 @@ function onAddIceCandidate(event, candidatesCollection) {
 
 function addIceCandidates() {
     console.log("Adding IceCandidatesto DB", iceCandidates.length)
-    const candidatesCollection = roomDB.collection(localStorage.getItem('id'));
+    const candidatesCollection = roomDB.collection(localStorage.getItem('uid'));
     while (iceCandidates.length) {
         candidatesCollection.add(iceCandidates.pop());
     }
@@ -219,6 +220,7 @@ function addIceCandidates() {
 }
 
 function registerPeerConnectionListeners(peerConnection) {
+    let index=null;
     peerConnection.addEventListener('icecandidate', (e) => onAddIceCandidate(e))
     peerConnection.addEventListener('icegatheringstatechange', () => {
         console.log(
@@ -228,7 +230,11 @@ function registerPeerConnectionListeners(peerConnection) {
     peerConnection.addEventListener('connectionstatechange', () => {
         switch (peerConnection.connectionState) {
             case 'connected':
-                onConnectionStateChange();
+                index=onConnectionStateChange();
+                break;
+            case 'failed':
+                if(index) removeRemoteVideo(index, participants);
+                break;
 
         }
         console.log(`Connection state change: ${peerConnection.connectionState}`, peerConnection);

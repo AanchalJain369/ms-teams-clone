@@ -29,6 +29,7 @@
         measurementId: "G-0DKCPEVW7W"
     };
     firebase.initializeApp(firebaseConfig);
+    listenAuthChange();
 </script>
 </head>
 
@@ -83,11 +84,8 @@
             </div>
         </div>
     </div>
-    <script>
+    <script>  
         function setCallee(callee) {
-            localStorage.setItem("name", "Aanchal");
-            localStorage.setItem("id", "Aanchal");
-            localStorage.setItem("callee", callee);
             window.location.href = "src/videoCall.html"
         }
         const history = [{

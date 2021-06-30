@@ -16,6 +16,7 @@
   <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+  <script src="./utils.js"></script>
 <script>
     var firebaseConfig = {
         apiKey: "AIzaSyAoThvyDnMKikCSZTzd00zp0_03lekKgGs",
@@ -27,6 +28,7 @@
         measurementId: "G-0DKCPEVW7W"
     };
     firebase.initializeApp(firebaseConfig);
+    listenAuthChange();
 </script>
 </head>
 
@@ -121,7 +123,6 @@
         <span>{msg}</span>
         <span><i class="fa fa-check-circle"></i></span>
     </div>
-    <script src="./utils.js"></script>
     <script src="./calls_contacts.js"></script>
     <script>
         startLoading();
@@ -161,12 +162,11 @@
             .add(newContact)
             .then((res)=>{
                 showAlert("success", "Contact Saved", "fa-check");
+                contacts.push({...newContact, id:res.id});
+                updateContactsList(contacts, 'contactsList');
                 setTimeout(stopLoading, 1);
             })
             .catch((err)=>console.log(err));
-
-            contacts.push(newContact);
-            updateContactsList(contacts, 'contactsList');
             addContactForm.reset();
         }
         document.getElementById('addContactClose').onclick = () => toggleVisibility('addContactModal', 'block');

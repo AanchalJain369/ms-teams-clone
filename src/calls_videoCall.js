@@ -66,6 +66,6 @@ function createRemoteVideo(participant) {
 
 function removeRemoteVideo(index, participants) {
     document.getElementById('videos').children[index + 1].remove();
-    participants.splice(index + 1, 1);
+    participants[index+1]=null;
     console.log(participants);
 }

@@ -12,6 +12,7 @@
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
+     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
 </head>
 
@@ -63,7 +64,7 @@
             </div>
             <div id="videos">
                 <div class="video">
-                    <video id="localVideo" autoplay draggable="true" aria-data></video>
+                    <video id="localVideo" autoplay draggable="true" muted="true"></video>
                     <div class="sub-controls">
                         <i class="fa fa-thumb-tack"></i>
                     </div>
@@ -122,6 +123,7 @@
     <script src="videoCall.js"></script>
     <script src="./calls_videoCall.js"></script>
     <script>
+        listenAuthChange();
         document.getElementsByClassName('video')[0].getElementsByClassName('name')[0].innerText = localStorage.getItem('name');
         /* 
         let localVideo = document.getElementById('localVideo');
