@@ -73,26 +73,25 @@ function getAvatarColor(name) {
     return hexToRGB(colors[sum % (colors.length)]);
 }
 
-function logout() {
+function logout(){
     firebase.auth().signOut().then(() => {
-        localStorage.removeItem('user');
-        location.href = "/login.html";
+        localStorage.clear();
     }).catch((error) => {
         console.log(error)
     });
 }
 
-function listenAuthChange() {
+function listenAuthChange(){
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             localStorage.setItem('name', user.displayName);
             localStorage.setItem('email', user.email);
             localStorage.setItem('uid', user.uid);
-            if (location.href.includes('/login.html')) location.href = "/index.html";
+            if(location.href.includes('/login.html'))location.href="/index.html";
         } else {
             console.log('Logged out')
             console.log(location.href)
-            if (!location.href.includes('/login.html')) location.href = '/login.html'
+            if(!location.href.includes('/login.html'))location.href='/login.html'
         }
     });
 }

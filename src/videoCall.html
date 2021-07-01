@@ -22,6 +22,9 @@
     </header>
     <div>
         <div class="side-nav">
+            <div class="top">
+            </div>
+            <div class="mid">
             <a>
                 <i class="fa fa-bell-o"></i>
             </a>
@@ -31,9 +34,15 @@
             <a href="./contacts.html">
                 <i class="fa fa-phone"></i>
             </a>
-            <a href="../index.html">
+            <a href="/index.html">
                 <i class="fa fa-history"></i>
             </a>
+            </div>
+            <div class="bottom">
+                <a href="#" onclick="logout()">
+                    <i class="fa fa-sign-out"></i>
+                </a>
+            </div>
         </div>
 
 
@@ -163,9 +172,9 @@
         }];
         showAddParticipants('addParticipantsList');
         let user = {
-            "id": "0",
-            "name": "Aanchal Jain",
-            "email": "aanchal.jain.eee19@itbhu.ac.in",
+            "id": localStorage.getItem('uid'),
+            "name": localStorage.getItem('name'),
+            "email": localStorage.getItem('email'),
             "screen": false
         };
         let participants = [user];
