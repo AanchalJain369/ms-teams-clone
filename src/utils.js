@@ -95,3 +95,8 @@ function listenAuthChange(){
         }
     });
 }
+
+function scrollDown(id){
+    let element=document.getElementById(id);
+    element.scrollTo(0,element.scrollHeight)
+}

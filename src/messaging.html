@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Teams Clone</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+    <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+    <script src="./utils.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyAoThvyDnMKikCSZTzd00zp0_03lekKgGs",
+            authDomain: "ms-teams-clone-3687d.firebaseapp.com",
+            projectId: "ms-teams-clone-3687d",
+            storageBucket: "ms-teams-clone-3687d.appspot.com",
+            messagingSenderId: "35666250286",
+            appId: "1:35666250286:web:b24086e604e7338629adbf",
+            measurementId: "G-0DKCPEVW7W"
+        };
+        firebase.initializeApp(firebaseConfig);
+        listenAuthChange();
+    </script>
+</head>
+
+<body>
+    <header>
+
+    </header>
+    <div>
+        <div class="side-nav">
+            <div class="top">
+            </div>
+            <div class="mid">
+                <a>
+                    <i class="fa fa-bell-o"></i>
+                </a>
+                <a class="active">
+                    <i class="fa fa-commenting-o"></i>
+                </a>
+                <a href="./contacts.html">
+                    <i class="fa fa-phone"></i>
+                </a>
+                <a href="/index.html">
+                    <i class="fa fa-history"></i>
+                </a>
+            </div>
+            <div class="bottom">
+                <a href="#" onclick="logout()">
+                    <i class="fa fa-sign-out"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-window">
+            <nav class="main-nav nav">
+                <ul>
+                    <h1>Meeting App</h1>
+                    <li class="right-align">
+                        <div class="avatar">
+                            AJ
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="history">
+                <div class="tab-heading">Messaging</div>
+                <div class="tab">
+                    <input type="text" name="search" placeholder="Type a name" onkeyup="searchRooms(this.value)">
+                    <div id="roomsList">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="loading">
+        <div id="loader"></div>
+    </div>
+    <div id="alert" class="alert alert-danger">
+        <span>{msg}</span>
+        <span><i class="fa fa-check-circle"></i></span>
+    </div>
+    <script src="./messaging.js"></script>
+    <script>
+        startLoading();
+        let roomID = window.location.search.substr(6, window.location.search.length - 1);
+        document.onload = roomID? loadChat(roomID):fetchRooms();
+        let rooms = [];
+        async function fetchRooms() {
+            const db = firebase.firestore();
+            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
+            usersDB.get().then((doc)=>{
+                if(doc.exists) {
+                    console.log(doc.data()['rooms']);
+                    rooms=doc.data()['rooms'];
+                    updateRoomsList(doc.data()['rooms'], "roomsList");
+                    stopLoading();
+                }
+            })
+        }
+
+        function stopLoading() {
+            document.getElementById('loading').style.display = "none";
+        }
+
+        function startLoading() {
+            document.getElementById('loading').style.display = "flex";
+            console.log('loading')
+        }
+        function loadChat(id) {
+            const msgs = [];
+            const db = firebase.firestore();
+            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
+                document.getElementsByClassName('tab')[0].innerHTML = `<h3>${id}</h3>
+            <div id="chats" class="chats">
+                 
+            </div>
+            <form id="sendMsg" style="display:flex;  margin-top: 10px !important;">
+                <textarea name="msg" class="msgInput"></textarea>
+                <button type="submit" style="margin:0"><i class="fa fa-send"></i></button>
+            </form>`;
+            document.getElementById('sendMsg').onsubmit=(e)=>sendMsg(e)
+
+            usersDB.collection(localStorage.getItem('remoteChat')).orderBy('time').onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change, i) => {
+                    if (change.type === "added" && change.doc.id!=="details") {
+                        const msg={...change.doc.data(), time:change.doc.data().time.toDate()};
+                        document.getElementById('chats').insertAdjacentHTML('beforeend',createMsg(msg));
+                    }
+                });
+                stopLoading();
+                scrollDown("chats");
+            })
+        }
+        function sendMsg(e){
+            e.preventDefault();
+            const msg={from:localStorage.getItem('uid'), msg:e.target["msg"].value, time:new Date()};
+            const db = firebase.firestore();
+            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
+            usersDB.collection(localStorage.getItem('remoteChat')).add(msg)
+            /* document.getElementById('chats').insertAdjacentHTML('beforeend',createMsg(msg)); */
+            e.target.reset();
+        }
+
+        function setRemoteChat(remoteChat) {
+            localStorage.setItem("remoteChat", remoteChat);
+            location.href='messaging.html?room='+remoteChat;
+        }
+
+        function searchRooms(val) {
+            updateRoomsList(filter(rooms, val), "roomsList");
+        }
+
+        function createMsg(msg) {
+            return `<div class="message ${msg.from === localStorage.getItem('uid') ? 'local' : 'remote'}-message">
+                    <div class="name">
+                        ${msg.from}
+                    </div>
+                    <div class="msg">
+                    ${msg.msg}
+                    </div>
+                    <div class="time">
+                        ${new Date(msg.time).toLocaleDateString()+"  "+new Date(msg.time).toLocaleTimeString()}
+                    </div>
+                </div>`
+        }
+    </script>
+
+</body>
+
+</html>

@@ -57,7 +57,8 @@ function createRemoteVideo(participant) {
     newVideo.className = 'video';
     newVideo.innerHTML = "<video id='remoteVideo" + i + "' autoplay playsinline></video>\
     <div class='sub-controls'>\
-        <i class='fa fa-thumb-tack'></i>\
+        <i class='fa fa-microphone-slash'></i>\
+        <i class='fa fa-frown-o'></i>\
     </div>\
     <div class='name'>" + (participant.screen ? "(Presenting) " : "") + participant.name + "</div>";
     videos.appendChild(newVideo);

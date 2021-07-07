@@ -17,6 +17,9 @@ function updateContactsList(contacts, id) {
             <div>\
             <button class='btn' onclick='setCallee(\"" +
             contacts[i].id +
+            "\")'><i class='fa fa-commenting'></i></button>\
+            <button class='btn' onclick='setCallee(\"" +
+            contacts[i].id +
             "\")'><i class='fa fa-video-camera'></i></button>\
             <button class='btn' onclick='editContact(" +
             i +

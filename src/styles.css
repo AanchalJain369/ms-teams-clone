@@ -9,12 +9,19 @@ body {
 }
 
 :root {
+    font-size: 18px;
     --primary-color: #6666aa;
     --dark-primary-color: #3b3b7a;
     --success-color: green;
     --danger-color: #ea4335;
     --dark-danger-color: #e22121;
     --light-color: #efefef;
+}
+
+@media only screen and (max-width: 920px) {
+    :root{
+        font-size: 16px;
+    }
 }
 
 
@@ -150,7 +157,7 @@ button[type="submit"] {
 }
 
 .main-window {
-    margin-left: 50px;
+    margin-left: 2.4rem;
 }
 
 
@@ -161,10 +168,10 @@ button[type="submit"] {
     background-color: #ecae27;
     width: 90%;
     margin: auto;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
+    border-bottom-left-radius: 1.5rem;
+    border-bottom-right-radius: 1.5rem;
     box-shadow: 3px 6px 7px 0px rgb(177 177 177);
-    font-size: 20px;
+    font-size: 0.8rem;
     margin-bottom: 50px;
 }
 
@@ -172,8 +179,8 @@ button[type="submit"] {
     background-color: var(--primary-color);
     display: inline-block;
     color: white;
-    padding: 10px 30px 10px 30px;
-    font-size: 18px;
+    padding: 0.6rem 1.5rem 0.6rem 1.5rem;
+    font-size: 1rem;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -183,6 +190,11 @@ button[type="submit"] {
     padding: 10px;
     border-radius: 3px;
     margin-bottom: 50px;
+}
+.tab > *{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .main-nav h1 {
@@ -230,7 +242,7 @@ button[type="submit"] {
 /* Side Nav */
 
 .side-nav {
-    width: 50px;
+    width: 2.4rem;
     background-color: var(--primary-color);
     height: 100%;
     top: 0;
@@ -238,7 +250,7 @@ button[type="submit"] {
     display: flex;
     justify-content:space-between;
     flex-direction: column;
-    font-size: 30px;
+    font-size: 1.5rem;
     align-items: center;
     box-shadow: 0px 20px 20px 0px rgb(177 177 177);
 }
@@ -246,14 +258,19 @@ button[type="submit"] {
 .side-nav .mid{
     display: flex;
     flex-direction: column;
+    width:100%;
+    justify-content: center;
+    text-align: center;
 }
 
 .side-nav a {
     margin-bottom: 20px;
     color: rgb(0, 0, 0);
-    padding: 10px;
 }
 
+.side-nav a i{
+    margin: 0;
+}
 .side-nav .bottom{
     margin-bottom: 20px;
 }
@@ -352,42 +369,63 @@ button[type="submit"] {
 
 
 /* video call */
+#videos {
+    position: relative;
+    display: flex;
+    place-content: center;
+    flex-wrap: wrap;
+    align-items: center;
+    height: calc(100vh - 180px);
+    margin-left: 40px;
+}
 
 video {
     max-width: 100%;
     max-height: 100%;
+    height:auto;
+    width:auto;
+    object-fit: contain;
     background-color: var(--light-color);
     border-radius: 5px;
     background-color: black;
 }
 
 .video {
+    max-width: 100%;
+    height :50%;
     position: relative;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: space-between;
-    z-index: 15;
-    height: 50%;
-    max-width: 45%;
     margin: 5px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 8px;
 }
 
 .video .sub-controls {
     font-size: 18px;
     position: absolute;
     top: 0;
-    right: 0;
-    background-color: white;
-    width: 25px;
-    text-align: center;
+    left: 0;
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
     font-size: 20px;
-    border-radius: 50%;
-    margin: 2px;
+    margin: 5px 0 0 5%;
+}
+
+.video .sub-controls i{
+    padding: 5px;
+    border-radius: 5px;
+}
+.video .sub-controls i:last-child{
+    background-color:#ecae27;
 }
 
 .video .name {
     position: absolute;
-    bottom: 30px;
+    bottom: 0px;
     font-weight: 500;
     width: 100%;
     font-size: 17px;
@@ -431,15 +469,6 @@ video {
 
 .video-controls .dropdown {
     top: 0px;
-}
-
-#videos {
-    display: flex;
-    place-content: center;
-    flex-wrap: wrap;
-    align-items: center;
-    height: calc(100vh - 180px);
-    margin-left: 40px;
 }
 
 
@@ -696,6 +725,75 @@ video {
     box-shadow: 1px 4px 8px 0px rgb(147 128 128);
 }
 
+.chats{
+    width:100%;
+    max-height: 300px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
+.message{
+    display: flex;
+    min-width: 100px;
+    flex-direction: column;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 14px;
+    margin-bottom: 2px ;
+}
+
+.message .name{
+    font-weight: 800;
+}
+.message .time{
+    text-align: right;
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 10px;
+}
+
+.local-message{
+    align-self: flex-start;
+    max-width: 90%;
+    background-color: #c5f1b9;
+}
+
+.remote-message{
+    align-self: flex-end;
+    max-width:90%;
+    background-color: #e6c888;
+}
+
+.msgInput{
+    width:100%;
+    height: 50px;
+    color: #fff;
+    border-radius: 10px;
+    outline: none;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+}
+
+.message .name, .message .time{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.message .msg{
+    overflow: visible;
+    white-space: normal;
+    word-wrap: break-word;
+    hyphens: auto;
+}
+
+.chats::-webkit-scrollbar,.msgInput::-webkit-scrollbar{
+    width: 7px;
+    background-color: var(--primary-color);
+}
+
+.chats::-webkit-scrollbar-thumb, .msgInput::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--dark-primary-color);
+}
 /* Chotuuuu */
 
 .chotu-btn {

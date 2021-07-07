@@ -28,7 +28,7 @@
             <a>
                 <i class="fa fa-bell-o"></i>
             </a>
-            <a>
+            <a href="./messaging.html">
                 <i class="fa fa-commenting-o"></i>
             </a>
             <a href="./contacts.html">
@@ -75,7 +75,8 @@
                 <div class="video">
                     <video id="localVideo" autoplay draggable="true" muted="true"></video>
                     <div class="sub-controls">
-                        <i class="fa fa-thumb-tack"></i>
+                        <i class="fa fa-microphone"></i>
+                        <i class="fa fa-smile-o"></i>
                     </div>
                     <div class="name">
 
@@ -115,11 +116,11 @@
         <div class="dropdown">
             <button onclick="toggleVisibility('reactions','block')"><i class="fa fa-smile-o"></i></button>
             <div id="reactions">
-                <button><i class="fa fa-smile-o"></i></button>
-                <button><i class="fa fa-frown-o"></i></button>
-                <button><i class="fa fa-hand-paper-o"></i></button>
-                <button><i class="fa fa-thumbs-o-up"></i></button>
-                <button><i class="fa fa-thumbs-o-down"></i></button>
+                <button onclick="toggleReaction('fa fa-smile-o')"><i class="fa fa-smile-o"></i></button>
+                <button onclick="toggleReaction('fa fa-frown-o')"><i class="fa fa-frown-o"></i></button>
+                <button onclick="toggleReaction('fa fa-hand-paper-o')"><i class="fa fa-hand-paper-o"></i></button>
+                <button onclick="toggleReaction('fa fa-thumbs-o-up')"><i class="fa fa-thumbs-o-up"></i></button>
+                <button onclick="toggleReaction('fa fa-thumbs-o-down')"><i class="fa fa-thumbs-o-down"></i></button>
             </div>
         </div>
         <button class="btn-danger"><i class="fa fa-close"></i></button>
