@@ -110,6 +110,14 @@ label {
 .right-align {
     text-align: center;
     float: right !important;
+
+}
+.main-nav{
+    max-height: 70px;
+}
+.main-nav button.btn-primary{
+    margin: 0;
+    padding: 0;
 }
 
 .center {
@@ -268,7 +276,6 @@ button[type="submit"] {
 .main-nav ul {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -323,7 +330,6 @@ button[type="submit"] {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    width:70%;
 }
 
 .side-nav .mid{
