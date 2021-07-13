@@ -1,15 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Teams Clone</title>
-    <link rel="stylesheet" href="src/styles.css" />
+    <title>LinkUp</title>
+    <meta name="theme-color" content="#6666aa" />
+    <meta
+      name="LinkUp"
+      content="Linkup is a web app using which you can link up with your friends with just one click."
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/logo_transparent948x948.png" type="image/png">
+    <link rel="apple-touch-icon" href="/logo_transparent152x152.png">
+    <link rel="stylesheet" href="/src/styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-    <script src="src/utils.js"></script>
-    <script src="src/calls_history.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js')
+                .then(function(registration) {
+                    console.log('Registration successful, scope is:', registration.scope);
+                })
+                .catch(function(error) {
+                    console.log('Service worker registration failed, error:', error);
+                });
+            })
+    }
+    </script>
+    <style>
+        .bg{
+            display: none;
+            background-image: url('./src/chat.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            filter:blur(7px);
+            height: 100%;
+            width: 100%;
+            position: absolute;
+        }
+        html{
+            height: 100vh;
+        }
+        body{
+            height: 100%;
+        }
+        .container{
+            display: flex;
+            justify-content: space-between;
+            height: 100vh;
+            align-items: center;
+        }
+        h3{
+            z-index: 25;
+            margin-bottom: 20px;
+        }
+        h1{
+            color: var(--dark-primary-color);
+            z-index: 25;
+            margin-bottom: 20px;
+        }
+        .about .form-container{
+            margin: auto;
+        }
+        .form-container{
+            border: none;
+            min-height: 0;
+            min-width: 250px;
+            max-height: 100%;
+        }
+        .about{
+            padding: 5px;
+            width:100%;
+            padding: 25px;
+        }
+        .container > img{
+            height: 100%;
+            max-width: 70%;
+            object-fit: contain;
+        }
+        #googleLogin{
+            max-width: 100%;
+            width: 250px;
+            margin: auto;
+        }
+
+        @media (max-width: 570px) {
+            .container > img{
+                display: none;
+            }
+            .bg{
+                display: block;
+            }
+            .about{
+                background-color: rgba(177,177,177,0.5);
+                color: white;
+                z-index: 250;
+                width: auto;
+                margin: auto;
+            }
+            h1{
+                color: black;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg"></div>
+    <div class="container">
+        <div class="about form-container">
+            <h3>Missing your Friends?</h3>
+            <img src="/logo_transparent152x152.png">
+            <h1>Let's LinkUp!</h1>
+            <div>
+                <span>Please Login to continue!</span>
+                <br/><br/>
+                <button id="googleLogin" onclick="googleLogin()">
+                    <div id="googleLogo">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" viewbox="0 0 48 48" class="abcRioButtonSvg"><g><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path><path fill="none" d="M0 0h48v48H0z"></path></g></svg>
+                    </div>
+                    <div>
+                    Google Login
+                    </div>
+                </button>
+            </div>
+        </div>
+        <img src="./src/front.jpg">
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
 
   <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
@@ -18,6 +137,7 @@
   <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+  <script src="./src/utils.js"></script>
 <script>
     var firebaseConfig = {
         apiKey: "AIzaSyAoThvyDnMKikCSZTzd00zp0_03lekKgGs",
@@ -29,80 +149,23 @@
         measurementId: "G-0DKCPEVW7W"
     };
     firebase.initializeApp(firebaseConfig);
+    var db = firebase.firestore();
     listenAuthChange();
+    async function login(provider){
+        firebase.auth()
+        .signInWithPopup(provider)
+        .then(async (result) => {
+            var credential = result.credential;
+            console.log(credential)
+            db.collection(credential.uid)
+        }).catch((error) => {
+            console.log(error)
+        });
+    }
+    function googleLogin(){
+        login(new firebase.auth.GoogleAuthProvider());
+    }
+
 </script>
-</head>
-
-<body>
-    <header>
-
-    </header>
-    <div>
-        <div class="side-nav">
-            <div class="top">
-            </div>
-            <div class="mid">
-            <a>
-                <i class="fa fa-bell-o"></i>
-            </a>
-            <a href="./src/messaging.html">
-                <i class="fa fa-commenting-o"></i>
-            </a>
-            <a href="./src/contacts.html">
-                <i class="fa fa-phone"></i>
-            </a>
-            <a class="active">
-                <i class="fa fa-history"></i>
-            </a>
-            </div>
-            <div class="bottom">
-                <a href="#" onclick="logout()">
-                    <i class="fa fa-sign-out"></i>
-                </a>
-            </div>
-        </div>
-
-        <div class="main-window">
-            <nav class="main-nav nav">
-                <ul>
-                    <h1>Meeting App</h1>
-                    <li>
-                        <div class="avatar">
-                            AJ
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-            <div class="history">
-                <div class="tab-heading">Recents</div>
-                <div class="tab">
-                    <input type="text" name="search" placeholder="Type a name" onkeyup="searchLogs(this.value)">
-                    <div id="history">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>  
-        function setCallee(callee) {
-            window.location.href = "src/videoCall.html"
-        }
-        const history = [{
-            "name": "Aman Jain",
-            "start_time": "2:00",
-            "duration": "12:00:00"
-        }, {
-            "name": "Aanchal Jain",
-            "start_time": "4:00:00",
-            "duration": "5:00:00"
-        }];
-        updateHistory(history, "history");
-
-        function searchLogs(val) {
-            updateHistory(filter(history, val), "history");
-        }
-    </script>
 </body>
-
 </html>

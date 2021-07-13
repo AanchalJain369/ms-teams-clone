@@ -1,3 +1,11 @@
+function stopLoading() {
+    document.getElementById('loading').style.display = "none";
+}
+
+function startLoading() {
+    document.getElementById('loading').style.display = "flex";
+}
+
 function showAlert(type, msg, iconClass) {
     let alert = document.getElementById('alert')
     alert.children[0].innerHTML = msg;
@@ -9,6 +17,7 @@ function showAlert(type, msg, iconClass) {
 }
 
 function getAvatar(name) {
+    if(name==null || name== undefined) return '';
     let avatar = name[0].toUpperCase();
     let index = name.indexOf(' ');
     if (index != -1) avatar += name[index + 1].toUpperCase();
@@ -18,6 +27,7 @@ function getAvatar(name) {
 function search(data, searchString) {
     searchString = searchString.toLowerCase();
     for (const key in data) {
+        if(key==='id' || key==='uid') continue;
         let x = String(data[key]).toLowerCase();
         if (x.includes(searchString)) return true;
     }
@@ -81,17 +91,29 @@ function logout(){
     });
 }
 
-function listenAuthChange(){
+async function listenAuthChange(){
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             localStorage.setItem('name', user.displayName);
             localStorage.setItem('email', user.email);
             localStorage.setItem('uid', user.uid);
-            if(location.href.includes('/login.html'))location.href="/index.html";
+            var uid=user.uid;
+            var name=user.displayName
+            db.collection('users').doc(user.uid).set({
+                name:user.displayName,
+                email:user.email,
+            });
+            if(location.pathname==='/' | location.pathname==='/index.html'){
+                let redirection=localStorage.getItem('redirection')?localStorage.getItem('redirection'):'/src/contacts.html';
+                localStorage.removeItem('redirection');
+                location.href=redirection;
+            }
         } else {
             console.log('Logged out')
-            console.log(location.href)
-            if(!location.href.includes('/login.html'))location.href='/login.html'
+            if(!(location.pathname==='/' | location.pathname==='/index.html')){
+                localStorage.setItem("redirection",location.href);
+                location.href='/index.html'
+            }
         }
     });
 }
@@ -99,4 +121,42 @@ function listenAuthChange(){
 function scrollDown(id){
     let element=document.getElementById(id);
     element.scrollTo(0,element.scrollHeight)
+}
+
+async function fetchContacts(){
+    let contacts=[];
+    usersDB = db.collection('users').doc(localStorage.getItem('uid'));
+    return usersDB.collection('contacts').get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            contacts.push({...doc.data(), id:doc.id});
+        });
+        return contacts;
+    }).catch((error)=>console.log(error));
+}
+
+async function fetchParticipants(roomID){
+    let participants=[];
+    roomsDB = db.collection('rooms').doc(roomID);
+    return roomsDB.collection('participants').get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            participants.push(doc.data());
+        });
+        stopLoading();
+        return participants;
+    }).catch((error)=>console.log(error));
+}
+
+async function addMsg(msg){
+    usersDB = db.collection('rooms').doc(roomID);
+    return usersDB.collection('chats').add(msg)
+}
+
+function setCallee(roomID) {
+    localStorage.setItem("callee", roomID)
+    if(roomID===undefined | roomID===null){
+        showAlert('danger', 'Please create a room')
+    }
+    else{
+        window.location.href = "./videoCall.html?room="+roomID
+    }
 }

@@ -1,17 +1,24 @@
 @import url("https://fonts.googleapis.com/css?family=Imprima");
+html{
+    height: 100%;
+}
 body {
     margin: 0;
     font-family: Imprima;
+    min-height: 100%;
+    overflow-y:hidden;
 }
 
 * {
     box-sizing: border-box;
+    font-family: Imprima;
 }
 
 :root {
     font-size: 18px;
     --primary-color: #6666aa;
     --dark-primary-color: #3b3b7a;
+    --secondary-color:#ecae27;
     --success-color: green;
     --danger-color: #ea4335;
     --dark-danger-color: #e22121;
@@ -24,11 +31,50 @@ body {
     }
 }
 
+@media (max-width: 570px) {
+    .side-nav .mid{
+        height: auto !important;
+    }
+}
+
+@media (max-width: 475px) {
+    #name{
+        display: none !important;
+    }
+    .main-nav ul li{
+        margin: 0 !important;
+        padding: 0;
+        flex-grow: 1;
+        text-align: right;
+    }
+    .main-nav ul li button{
+        margin: 0 10px 0 0 !important;
+    }
+    .main-nav ul li button a{
+        font-size: 0px;
+    }
+    .main-nav ul li button a i{
+        font-size: 18px;
+    }
+}
+
+.main-nav button a{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.fa-sign-out{
+    margin-left: 4px;
+}
+
 
 /* Navbar common styles */
 
 .nav ul {
     margin: 0;
+    padding: 0;
     list-style-type: none;
 }
 
@@ -62,6 +108,7 @@ label {
 }
 
 .right-align {
+    text-align: center;
     float: right !important;
 }
 
@@ -165,7 +212,7 @@ button[type="submit"] {
 
 .main-nav {
     /* background-color: rgba(177, 177, 177, 0.1); */
-    background-color: #ecae27;
+    background-color: var(--secondary-color);
     width: 90%;
     margin: auto;
     border-bottom-left-radius: 1.5rem;
@@ -173,6 +220,14 @@ button[type="submit"] {
     box-shadow: 3px 6px 7px 0px rgb(177 177 177);
     font-size: 0.8rem;
     margin-bottom: 50px;
+}
+
+.main-nav ul li a{
+    color: #fff;
+    padding: 10px;
+}
+.main-nav button.btn-primary{
+    margin: 10px;
 }
 
 .tab-heading {
@@ -190,6 +245,7 @@ button[type="submit"] {
     padding: 10px;
     border-radius: 3px;
     margin-bottom: 50px;
+    height: calc(100vh - 200px);
 }
 .tab > *{
     overflow: hidden;
@@ -199,11 +255,20 @@ button[type="submit"] {
 
 .main-nav h1 {
     margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.main-nav h1 img{
+    height: 70px;
 }
 
 .main-nav ul {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -243,22 +308,34 @@ button[type="submit"] {
 
 .side-nav {
     width: 2.4rem;
-    background-color: var(--primary-color);
     height: 100%;
     top: 0;
     position: fixed;
     display: flex;
-    justify-content:space-between;
+    justify-content: center;
     flex-direction: column;
     font-size: 1.5rem;
     align-items: center;
-    box-shadow: 0px 20px 20px 0px rgb(177 177 177);
+}
+
+#name{
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width:70%;
 }
 
 .side-nav .mid{
     display: flex;
+    background-color: var(--primary-color);
+    box-shadow: 0px 20px 20px 0px rgb(177 177 177);
+    padding-top: 15px;;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     flex-direction: column;
     width:100%;
+    height: 100%;
     justify-content: center;
     text-align: center;
 }
@@ -292,10 +369,10 @@ button[type="submit"] {
 }
 
 .contact-card {
-    padding: 10px;
+    padding: 5px;
     box-shadow: 1px 0px 5px 0px rgb(177 177 177);
     width: 100%;
-    margin-bottom: 5px;
+    margin: 4px;
     border-radius: 7px;
 }
 
@@ -377,6 +454,7 @@ button[type="submit"] {
     align-items: center;
     height: calc(100vh - 180px);
     margin-left: 40px;
+    text-align: center;
 }
 
 video {
@@ -420,7 +498,7 @@ video {
     border-radius: 5px;
 }
 .video .sub-controls i:last-child{
-    background-color:#ecae27;
+    background-color: var(--secondary-color);
 }
 
 .video .name {
@@ -445,8 +523,8 @@ video {
     position: absolute;
     background-color: rgba(0, 0, 0, 0.5);
     bottom: 20px;
-    width: calc(100vw - 116px);
-    left: 90px;
+    width: calc(100vw - 10px);
+    left: 5px;
     border-radius: 10px;
     z-index: 20;
     display: flex;
@@ -457,10 +535,15 @@ video {
     color: white;
     border-radius: 5px !important;
     background-color: var(--primary-color);
-    font-size: 25px !important;
+    font-size: 20px !important;
     margin-right: 15px;
     width: 50px;
     box-shadow: none;
+}
+
+.video-controls button.selected{
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.7) !important;
 }
 
 .video-controls button:hover {
@@ -490,44 +573,67 @@ video {
 .modalBox {
     box-shadow: 4px 5px 14px 2px rgb(25 23 23);
     margin: 15% auto;
-    width: 300px;
+    max-width: 300px;
     max-height: 65vh;
-    overflow-x: scroll;
     overflow-x: hidden;
-    z-index: 996;
+    z-index: 990;
     background-color: var(--light-color);
     border-radius: 10px;
 }
 
 .modalBox .content {
     overflow: hidden;
-    border-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     padding: 0 20px 20px;
     background-color: white;
 }
 
+#contactsList{
+    padding-right: 8px;
+}
+
 .modalBox .contact-card {
-    background-color: white;
-    margin-bottom: 5px;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin: 2.5px 0px;
+    padding: 0;
     border-radius: 5px;
+    border-top-left-radius: 16px;
+    border-bottom-left-radius: 16px;
+}
+
+.modalBox .contact-card button{
+    margin-bottom: 5px;
+    background-color: var(--primary-color);
+    color: #fff;
 }
 
 .modalBox h1 button {
     width: 30px;
     box-shadow: none;
     margin-top: 5px;
-}
-
-.modalBox h1 {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 5px;
-    margin: 0;
     border-radius: 5px;
 }
 
+.modalBox .content button{
+    border-radius: 5px;
+    padding: 8px;
+}
+
+.modalBox h1 {
+    background-color: var(--secondary-color);
+    color: #fff;
+    padding: 5px;
+    font-size: 1.5rem;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
 .modalBox input {
-    width: 90%;
+    width: 100%;
     font-size: 16px;
     background-color: var(--light-color);
 }
@@ -575,7 +681,7 @@ video {
 .alert {
     display: none;
     z-index: 999;
-    font-size: 18px;
+    font-size: 16px;
     position: fixed;
     box-shadow: 4px 4px 0px 0px rgb(177 177 177);
     bottom: 0;
@@ -694,7 +800,6 @@ video {
 
 .form-container{
     border: 2px solid rgba(0, 0, 0, 0.4);
-    margin: 15% auto;
     width: 300px;
     text-align: center;
     max-height: 65vh;
@@ -726,16 +831,28 @@ video {
 }
 
 .chats{
+    color: #000;
     width:100%;
-    max-height: 300px;
+    height: calc(100% - 180px);
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
 }
 
+.tab .filters{
+    border-bottom: 2px solid rgba(177,177,177,0.5);
+}
+
+.filters > *{
+    margin: 0 5px;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 50%;
+    width:40px;
+}
+
 .message{
     display: flex;
-    min-width: 100px;
     flex-direction: column;
     border-radius: 5px;
     padding: 5px;
@@ -753,15 +870,30 @@ video {
 }
 
 .local-message{
-    align-self: flex-start;
+    min-width: 100px;
+    align-self: flex-end;
     max-width: 90%;
     background-color: #c5f1b9;
 }
 
 .remote-message{
-    align-self: flex-end;
+    min-width: 100px;
+    align-self: flex-start;
     max-width:90%;
     background-color: #e6c888;
+}
+
+#roomsList{
+    overflow-y: auto;
+    height: calc(100% - 115px);
+    padding-right: 10px;
+}
+
+.bot-message{
+    align-self: center;
+    max-width:90%;
+    background-color: var(--light-color);
+    font-size: 12px;
 }
 
 .msgInput{
@@ -785,12 +917,12 @@ video {
     hyphens: auto;
 }
 
-.chats::-webkit-scrollbar,.msgInput::-webkit-scrollbar{
+.chats::-webkit-scrollbar,.msgInput::-webkit-scrollbar, #roomsList::-webkit-scrollbar{
     width: 7px;
     background-color: var(--primary-color);
 }
 
-.chats::-webkit-scrollbar-thumb, .msgInput::-webkit-scrollbar-thumb {
+.chats::-webkit-scrollbar-thumb, .msgInput::-webkit-scrollbar-thumb, #roomsList::-webkit-scrollbar-thumb{
     border-radius: 10px;
     background-color: var(--dark-primary-color);
 }
@@ -807,3 +939,38 @@ video {
     box-shadow: 1px 4px 8px 0px rgb(147 128 128);
 }
 
+
+
+#blocker{
+    z-index: 5;
+    position: fixed;
+    background-color: rgb(57, 57, 57);
+    border: 1px solid black;
+    width: calc(100vw - 10px);
+    height: 40px;
+    left: 5px;
+    top: 80px;
+}
+
+#sideWindow{
+    width: 300px;
+    height: calc(100vh - 155px);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    z-index: 600;
+    position: fixed;
+    top: 80px;
+    transition: transform 0.5s;
+    right: -305px;
+    box-shadow: -4px 3px 4px 0px rgb(70 70 70);
+}
+
+#sendMsg button{
+    background-color: transparent;
+}
+
+.left-slide{
+    transform: translateX(-300px);
+}

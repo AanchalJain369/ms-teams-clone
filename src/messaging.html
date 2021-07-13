@@ -5,7 +5,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Teams Clone</title>
+    <title>LinkUp</title>
+    <meta name="theme-color" content="#6666aa" />
+    <meta
+      name="LinkUp"
+      content="Linkup is a web app using which you can link up with your friends with just one click."
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/logo_transparent948x948.png" type="image/png">
+    <link rel="apple-touch-icon" href="/logo_transparent152x152.png">
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -28,7 +36,19 @@
             measurementId: "G-0DKCPEVW7W"
         };
         firebase.initializeApp(firebaseConfig);
-        listenAuthChange();
+        var db;
+        async function initializeFirestore(){
+            return firebase.firestore().enablePersistence({synchronizeTabs: true})
+        }
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+            .then(function(registration) {
+                console.log('Registration successful, scope is:', registration.scope);
+            })
+            .catch(function(error) {
+                console.log('Service worker registration failed, error:', error);
+            });
+        }
     </script>
 </head>
 
@@ -38,25 +58,12 @@
     </header>
     <div>
         <div class="side-nav">
-            <div class="top">
-            </div>
             <div class="mid">
-                <a>
-                    <i class="fa fa-bell-o"></i>
-                </a>
                 <a class="active">
                     <i class="fa fa-commenting-o"></i>
                 </a>
                 <a href="./contacts.html">
                     <i class="fa fa-phone"></i>
-                </a>
-                <a href="/index.html">
-                    <i class="fa fa-history"></i>
-                </a>
-            </div>
-            <div class="bottom">
-                <a href="#" onclick="logout()">
-                    <i class="fa fa-sign-out"></i>
                 </a>
             </div>
         </div>
@@ -64,11 +71,14 @@
         <div class="main-window">
             <nav class="main-nav nav">
                 <ul>
-                    <h1>Meeting App</h1>
+                    <a href="/"><h1><img src="/logo_transparent152x152.png">LinkUp</h1></a>
                     <li class="right-align">
-                        <div class="avatar">
-                            AJ
-                        </div>
+                        <span id="name"></span>
+                        <button class="btn-primary border-radius">
+                            <a href="#" onclick="logout()">
+                                Logout <i class="fa fa-sign-out"></i>
+                            </a>
+                        </button>
                     </li>
                 </ul>
             </nav>
@@ -76,9 +86,47 @@
                 <div class="tab-heading">Messaging</div>
                 <div class="tab">
                     <input type="text" name="search" placeholder="Type a name" onkeyup="searchRooms(this.value)">
+                    <div class="filters">
+                        <button class="btn-primary border-radius" id="addContact" onclick="addRoom()"><i class="fa fa-plus-circle"></i></button>
+                    </div>
                     <div id="roomsList">
 
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="addRoomModal" class="modal">
+        <div class="modalBox border-radius">
+            <h1>Add new Room <button class="right-align btn-danger" id="addRoomClose"><i class="fa fa-close"></i></button></h1>
+            <div class="content">
+                <form id="addRoomForm">
+                    <label>Enter room name:</label>
+                    <input required type="text" name="name" />
+                    <div class="text-center"><button type="submit" class="btn-success">Add <i
+                                class="fa fa-plus-circle"></i></button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="addParticipantsModal" class="modal">
+        <div class="modalBox border-radius">
+            <h1>Add Participants <button class="right-align btn-danger" onclick="toggleVisibility('addParticipantsModal', 'block');"><i
+                class="fa fa-close"></i></button></h1>
+            <div class="content">
+                <div id="addParticipantsList">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="showParticipantsModal" class="modal">
+        <div class="modalBox border-radius">
+            <h1>Participants <button class="right-align btn-danger" onclick="toggleVisibility('showParticipantsModal', 'block');"><i
+                class="fa fa-close"></i></button></h1>
+            <div class="content">
+                <div id="participantsList">
+
                 </div>
             </div>
         </div>
@@ -92,36 +140,175 @@
     </div>
     <script src="./messaging.js"></script>
     <script>
+        name=localStorage.getItem('name');
+        uid=localStorage.getItem('uid');
+        document.querySelector('.main-nav #name').innerHTML=name+" ";
         startLoading();
         let roomID = window.location.search.substr(6, window.location.search.length - 1);
-        document.onload = roomID? loadChat(roomID):fetchRooms();
         let rooms = [];
-        async function fetchRooms() {
-            const db = firebase.firestore();
-            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
-            usersDB.get().then((doc)=>{
-                if(doc.exists) {
-                    console.log(doc.data()['rooms']);
-                    rooms=doc.data()['rooms'];
-                    updateRoomsList(doc.data()['rooms'], "roomsList");
-                    stopLoading();
-                }
+        let participants=[];
+        let nickNames={};
+        nickNames[uid]='You'
+        let contacts=[];
+        let allowed=false;
+        document.onload = Promise.all([initializeFirestore()]).then(()=>{
+            db=firebase.firestore();
+            listenAuthChange();
+            roomID? loadChat(roomID):updateRooms();
+        })
+        async function updateRooms() {
+            usersDB = db.collection('users').doc(uid)
+            .collection('rooms').onSnapshot((snapshot)=>{
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        const room={...change.doc.data(), docID:change.doc.id};
+                        rooms.push(room);
+                        document.getElementById('roomsList').insertAdjacentHTML('beforeend',createRoomCard(room));
+                    }
+                    if(change.type==="removed"){
+                        const deletedRoom={...change.doc.data(), docID:change.doc.id};
+                        rooms.splice(rooms.findIndex((room)=>room.id===deletedRoom.id));
+                        document.getElementById('room'+deletedRoom.id).remove();
+                    }
+                })
+                stopLoading();
             })
         }
 
-        function stopLoading() {
-            document.getElementById('loading').style.display = "none";
+        function fetchRooms(){
+            usersDB = db.collection('users').doc(uid)
+            .collection('rooms').onSnapshot((snapshot)=>{
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        const room={...change.doc.data(), docID:change.doc.id};
+                        rooms.push(room);
+                    }
+                })
+            })
         }
 
-        function startLoading() {
-            document.getElementById('loading').style.display = "flex";
-            console.log('loading')
+        let addRoomForm = document.getElementById('addRoomForm');
+
+        function postRequest(roomID){
+            const url = 'https://api.daily.co/v1/rooms/';
+            const options = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer 3f3e5da0763f513fd7c9572a6a93bc93ddbd2950a5d01e9b4b3236c072218d62'
+            },
+            body: JSON.stringify({name: roomID,properties: {enable_new_call_ui: false, enable_network_ui: false}})
+            };
+
+            fetch(url, options)
+            .then(res => res.json())
+            .then(json => console.log(json))
+            .catch(err => console.error('error:' + err));
+        }
+
+
+        addRoomForm.onsubmit = function(e) {
+            e.preventDefault();
+            startLoading();
+            const newRoom = formToJSON(e.target);
+            newRoom.name=newRoom.name.trim();
+            db.collection('users').doc(uid);
+            db.collection("rooms").add(newRoom).then((room)=>{
+                console.log(room.id);
+                postRequest(room.id)
+                console.log(newRoom)
+                room.collection("participants").add({id:uid}).then(()=>{
+                    console.log('added to')
+                })
+                db.collection("users").doc(uid).collection('rooms').add({
+                    id:room.id,
+                    name:newRoom.name
+                })
+                stopLoading();
+            })
+            addRoomForm.reset();
+        }
+        document.getElementById('addRoomClose').onclick = () => toggleVisibility('addRoomModal', 'block');
+
+        function addRoom(){
+            toggleVisibility('addRoomModal', 'block');
+        }
+
+        function addParticipants(){
+            toggleVisibility('addParticipantsModal', 'block');
+            updateAddParticipants('addParticipantsList', contacts.filter((contact)=>{
+                return !participants.find((participant)=>{return participant.id==contact.uid})
+            }));
+        }
+
+        function removeParticipant(participantID, docID){
+            console.log(participantID)
+            db.collection('users').doc(participantID).collection('rooms')
+            .where("id","==", roomID).get()
+            .then((querySnapshot)=>{
+                if(querySnapshot.size==0){
+                    showAlert("danger","User does not exist","fa-close")
+                    stopLoading()
+                    return;
+                }
+                querySnapshot.forEach((doc)=>{
+                    doc.ref.delete().then(()=>console.log('deleted'))
+                })
+            })
+            db.collection('rooms').doc(roomID).collection('participants').doc(docID)
+            .delete().then(()=>showAlert("success", "Deleted participant", "fa-check"))
+            participants.splice(participants.findIndex((participant)=>participant.id===participantID))
+        }
+
+        function sendInvite(id){
+            db.collection('users').doc(id).collection('rooms').add({
+                id:roomID,
+                name:localStorage.getItem("roomName")
+            });
+            db.collection('rooms').doc(roomID).collection('participants')
+            .add({
+                id:id,
+            }).then((doc)=>{
+                participants.push({id:id, docID:doc.id})
+                updateAddParticipants('addParticipantsList', contacts.filter((contact)=>{
+                return !participants.find((participant)=>{return participant.id==contact.uid})
+                }));
+                showAlert("success", "Added participant", "fa-check")
+            });
         }
         function loadChat(id) {
-            const msgs = [];
-            const db = firebase.firestore();
-            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
-                document.getElementsByClassName('tab')[0].innerHTML = `<h3>${id}</h3>
+            roomsDB = db.collection('rooms').doc(id);
+            fetchRooms();
+            fetchContacts().then((tempContacts)=>{
+                startLoading();
+                contacts=tempContacts;
+                contacts.forEach((contact)=>nickNames[contact["uid"]]=contact["name"])
+                roomsDB.collection("chats").orderBy('time').onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added" && change.doc.id!=="details") {
+                        let msg={...change.doc.data(), time:change.doc.data().time.toDate()};
+                        if(msg.from ==='bot'){
+                            let end=msg.msg.indexOf(' ')
+                            let name=nickNames[msg.msg.substr(0,end)]
+                            if(name===undefined) name="Unknown";
+                            msg.msg=name+" "+msg.msg.substr(end+1);
+                        }
+                        msg.msg=msg.msg.replace(/[\u00A0-\u9999<>\&]/g, (item)=>{return '&#'+item.charCodeAt(0)+';';})
+                        document.getElementById('chats').insertAdjacentHTML('beforeend',createMsg(msg));
+                    }
+                    });
+                    stopLoading();
+                    scrollDown("chats");
+                })
+
+                const msgs = [];
+            document.getElementsByClassName('tab')[0].innerHTML = `<h3>${localStorage.getItem('roomName')}</h3>
+                <div class="filters">
+                    <button onclick="setCallee(roomID)" class="btn border-radius" id="addContact"><i class="fa fa-video-camera"></i></button>
+                    <button onclick="addParticipants()" class="btn-primary border-radius" id="addContact"><i class="fa fa-user-plus"></i> </button>
+                    <button onclick="showParticipants()" class="btn-primary"><i class="fa fa-user"></i> </button>
+                </div>
             <div id="chats" class="chats">
                  
             </div>
@@ -130,49 +317,71 @@
                 <button type="submit" style="margin:0"><i class="fa fa-send"></i></button>
             </form>`;
             document.getElementById('sendMsg').onsubmit=(e)=>sendMsg(e)
-
-            usersDB.collection(localStorage.getItem('remoteChat')).orderBy('time').onSnapshot((snapshot) => {
-                snapshot.docChanges().forEach((change, i) => {
-                    if (change.type === "added" && change.doc.id!=="details") {
-                        const msg={...change.doc.data(), time:change.doc.data().time.toDate()};
-                        document.getElementById('chats').insertAdjacentHTML('beforeend',createMsg(msg));
+            document.getElementsByClassName('msgInput')[0].onkeypress=((e)=>{
+                if(e.which == 13 && !e.shiftKey){
+                    e.preventDefault();
+                    document.getElementById('sendMsg').dispatchEvent(new SubmitEvent("submit"));
+                }
+            })
+            roomsDB.collection("participants").onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        const participant={...change.doc.data(), docID: change.doc.id};
+                        if(participant.id===uid) allowed=true;
+                        participants.push(participant);
+                        document.getElementById('participantsList').insertAdjacentHTML('beforeend',createParticipantCard(participant));
+                    }
+                    if(change.type==="removed"){
+                        const participant={...change.doc.data(), docID: change.doc.id};
+                        if(participant.id===uid) {
+                            allowed=false;
+                            location.href='/src/messaging.html';
+                        }
+                        participants.splice(participants.findIndex((p)=>participant.id===p.id),1);
+                        document.getElementById('participant'+participant.docID).remove();
                     }
                 });
-                stopLoading();
-                scrollDown("chats");
             })
+
+
+            });
         }
         function sendMsg(e){
             e.preventDefault();
-            const msg={from:localStorage.getItem('uid'), msg:e.target["msg"].value, time:new Date()};
-            const db = firebase.firestore();
-            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
-            usersDB.collection(localStorage.getItem('remoteChat')).add(msg)
-            /* document.getElementById('chats').insertAdjacentHTML('beforeend',createMsg(msg)); */
+            let temp=e.target["msg"].value.trim();
+            if(!allowed || temp==null || temp==undefined || temp=='') return;
+            const msg={from:uid, msg:temp, time:new Date()};
+            addMsg(msg);
             e.target.reset();
         }
 
-        function setRemoteChat(remoteChat) {
-            localStorage.setItem("remoteChat", remoteChat);
+        function setRemoteChat(remoteChat, roomName) {
+            localStorage.setItem("roomName", roomName);
             location.href='messaging.html?room='+remoteChat;
         }
 
         function searchRooms(val) {
-            updateRoomsList(filter(rooms, val), "roomsList");
+            document.getElementById('roomsList').innerHTML='';
+            filter(rooms, val)
+            .forEach((room)=>document.getElementById('roomsList').insertAdjacentHTML('beforeend',createRoomCard(room)))
         }
 
         function createMsg(msg) {
-            return `<div class="message ${msg.from === localStorage.getItem('uid') ? 'local' : 'remote'}-message">
+            return `<div class="message ${msg.from === uid ? 'local' : (msg.from==='bot'? 'bot' :'remote')}-message">
                     <div class="name">
-                        ${msg.from}
+                        ${msg.from!=='bot'?(nickNames[msg.from]===undefined ? "Unknown" :nickNames[msg.from]):""}
                     </div>
                     <div class="msg">
                     ${msg.msg}
                     </div>
                     <div class="time">
-                        ${new Date(msg.time).toLocaleDateString()+"  "+new Date(msg.time).toLocaleTimeString()}
+                        ${msg.from!=='bot' ?new Date(msg.time).toLocaleDateString()+"  "+new Date(msg.time).toLocaleTimeString() : ""}
                     </div>
                 </div>`
+        }
+
+        function showParticipants() {
+            toggleVisibility('showParticipantsModal', 'block');
         }
     </script>
 

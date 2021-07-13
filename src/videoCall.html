@@ -5,43 +5,80 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Teams Clone</title>
+    <title>LinkUp</title>
+    <meta name="theme-color" content="#6666aa" />
+    <meta
+      name="LinkUp"
+      content="Linkup is a web app using which you can link up with your friends with just one click."
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/logo_transparent948x948.png" type="image/png">
+    <link rel="apple-touch-icon" href="/logo_transparent152x152.png">
     <link rel="stylesheet" href="styles.css" />
+    <link rel="shortcut icon" href="#">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
 
     <!-- TODO: Add SDKs for Firebase products that you want to use
      https://firebase.google.com/docs/web/setup#available-libraries -->
-     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+    <script crossorigin src="https://unpkg.com/@daily-co/daily-js"></script>
+    <script src="./utils.js"></script>
+    <script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyAoThvyDnMKikCSZTzd00zp0_03lekKgGs",
+        authDomain: "ms-teams-clone-3687d.firebaseapp.com",
+        projectId: "ms-teams-clone-3687d",
+        storageBucket: "ms-teams-clone-3687d.appspot.com",
+        messagingSenderId: "35666250286",
+        appId: "1:35666250286:web:b24086e604e7338629adbf",
+        measurementId: "G-0DKCPEVW7W"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var db;
+    async function initializeFirestore(){
+        return firebase.firestore().enablePersistence({synchronizeTabs: true})
+    }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(function(registration) {
+            console.log('Registration successful, scope is:', registration.scope);
+        })
+        .catch(function(error) {
+            console.log('Service worker registration failed, error:', error);
+        });
+    }
+</script>
+<style>
+    #sideWindow > h3{
+        background-color: black;
+        margin:0;
+        padding: 1em;
+    }
+    .main-window{
+        margin: 0 !important;
+    }
+    #sendMsg{
+        padding: 5px 5px;
+        margin:0;
+    }
+    .side-nav{
+        display:none;
+    }
+</style>
 </head>
 
-<body style="overflow: hidden;">
-    <header>
-
-    </header>
+<body>
     <div>
         <div class="side-nav">
-            <div class="top">
-            </div>
             <div class="mid">
-            <a>
-                <i class="fa fa-bell-o"></i>
-            </a>
             <a href="./messaging.html">
                 <i class="fa fa-commenting-o"></i>
             </a>
             <a href="./contacts.html">
                 <i class="fa fa-phone"></i>
             </a>
-            <a href="/index.html">
-                <i class="fa fa-history"></i>
-            </a>
-            </div>
-            <div class="bottom">
-                <a href="#" onclick="logout()">
-                    <i class="fa fa-sign-out"></i>
-                </a>
             </div>
         </div>
 
@@ -49,39 +86,19 @@
         <div class="main-window">
             <nav class="main-nav nav">
                 <ul>
-                    <h1>Meeting App</h1>
+                    <a href="/"><h1><img src="/logo_transparent152x152.png">LinkUp</h1></a>
                     <li class="right-align">
-                        <div class="avatar">
-                            AJ
-                        </div>
+                        <span id="name"></span>
+                        <button class="btn-primary border-radius">
+                            <a href="#" onclick="logout()">
+                                Logout <i class="fa fa-sign-out"></i>
+                            </a>
+                        </button>
                     </li>
                 </ul>
             </nav>
-            <div class="dropdown">
-                <button class="right-align" onclick="toggleVisibility('featuresDropdown', 'block')"><i
-                        class="fa fa-bars"></i></button>
-                <ul id="featuresDropdown">
-                    <li onclick="toggleVisibility('addParticipantsModal', 'block');">Add Participants</li>
-                    <li onclick="showParticipantsModal()">Show Participants</li>
-                    <li>Change Background</li>
-                    <li>Whiteboard</li>
-                    <li>Mute All</li>
-                    <li>Chat</li>
-                    <li onclick="addShareScreen()">Present Screen</li>
-                    <li>Full Screen</li>
-                </ul>
-            </div>
             <div id="videos">
-                <div class="video">
-                    <video id="localVideo" autoplay draggable="true" muted="true"></video>
-                    <div class="sub-controls">
-                        <i class="fa fa-microphone"></i>
-                        <i class="fa fa-smile-o"></i>
-                    </div>
-                    <div class="name">
-
-                    </div>
-                </div>
+                <i>Establishing connection...<br/>OR<br/>You are not added in the room.</i>
             </div>
         </div>
     </div>
@@ -96,107 +113,214 @@
             </div>
         </div>
     </div>
-    <div id="showParticipantsModal" class="modal">
-        <div class="modalBox border-radius">
-            <h1>Participants <button class="right-align btn-danger" onclick="toggleVisibility('showParticipantsModal', 'block');"><i
-                class="fa fa-close"></i></button></h1>
-            <div class="content">
-                <div id="participantsList">
-
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="video-controls">
-        <button onclick="toggleAudio()"><i class="fa fa-microphone"></i></button>
-        <button onclick="toggleVideo()">
-            <i class="fa fa-video-camera"></i>
-            <img class="fa fa-video-camera-slash" height="90%" src="https://img.icons8.com/material-outlined/24/ffffff/no-video--v1.png"/>
-        </button>
-        <div class="dropdown">
-            <button onclick="toggleVisibility('reactions','block')"><i class="fa fa-smile-o"></i></button>
-            <div id="reactions">
-                <button onclick="toggleReaction('fa fa-smile-o')"><i class="fa fa-smile-o"></i></button>
-                <button onclick="toggleReaction('fa fa-frown-o')"><i class="fa fa-frown-o"></i></button>
-                <button onclick="toggleReaction('fa fa-hand-paper-o')"><i class="fa fa-hand-paper-o"></i></button>
-                <button onclick="toggleReaction('fa fa-thumbs-o-up')"><i class="fa fa-thumbs-o-up"></i></button>
-                <button onclick="toggleReaction('fa fa-thumbs-o-down')"><i class="fa fa-thumbs-o-down"></i></button>
-            </div>
-        </div>
-        <button class="btn-danger"><i class="fa fa-close"></i></button>
+        <button onclick="toggleReaction('fa fa-hand-paper-o')"><i class="fa fa-hand-paper-o"></i></button>
+        <button onclick="toggleReaction('fa fa-thumbs-o-up')"><i class="fa fa-thumbs-o-up"></i></button>
+        <button onclick="toggleReaction('fa fa-thumbs-o-down')"><i class="fa fa-thumbs-o-down"></i></button>
+        <button onclick="showChat()"><i class="fa fa-comments"></i></button>
+        <button onclick="showAddParticipantsModal()"><i class="fa fa-user-plus"></i></button>
+        <button onclick="showWhiteboard()"><i class="fa fa-pencil-square"></i></button>
+    </div>
+    <div id="loading">
+        <div id="loader"></div>
     </div>
     <div id="alert" class="alert alert-danger">
         <span>{msg}</span>
         <span><i class="fa fa-check-circle"></i></span>
     </div>
-    <script src="./utils.js"></script>
-    <script src="videoCall.js"></script>
+    <div id="blocker"></div>
+    <div id="sideWindow">
+
+    </div>
     <script src="./calls_videoCall.js"></script>
     <script>
-        listenAuthChange();
-        document.getElementsByClassName('video')[0].getElementsByClassName('name')[0].innerText = localStorage.getItem('name');
-        /* 
-        let localVideo = document.getElementById('localVideo');
-        let videos = document.getElementById('videos');
-        videos.ondragover = (e) => allowDrop(e);
-        localVideo.ondragstart = (e) => drag(e);
-        videos.ondrop = (e) => drop(e);
+        document.querySelector('.main-nav #name').innerHTML=name+" ";
 
-        function allowDrop(e) {
+        let roomID = window.location.search.substr(6, window.location.search.length - 1);
+        let allowed=false;
+        let contacts=[];
+        let nickNames={};
+        let participants=[];
+        uid=localStorage.getItem('uid');
+        name=localStorage.getItem('name');
+        nickNames[uid]='You'
+
+        document.onload=Promise.all([initializeFirestore()]).then(()=>{
+            db=firebase.firestore();
+            listenAuthChange();
+            loadChat(roomID);
+        })
+
+        function createFrameAndJoinRoom() {
+            window.callFrame = window.DailyIframe.createFrame({
+                iframeStyle: {
+                    position: 'fixed',
+                    border: '1px solid black',
+                    width: 'calc(100vw - 10px)',
+                    height: 'calc(100vh - 150px)',
+                    left: '5px',
+                    top: '80px'
+                },
+                showLeaveButton: true,
+                userName: name
+            });
+            callFrame.setShowNamesMode('always')
+            callFrame.setUserName(name)
+            callFrame.join({ url: 'https://ms-teams-clone.daily.co/'+roomID });
+            callFrame.on('left-meeting',()=>{
+                const msg={from:"bot",time:new Date(), msg:`${uid} left videoChat`}
+                addMsg(msg);
+            })
+        }
+
+        function showAddParticipantsModal() {
+            if(!allowed) return;
+            toggleVisibility('addParticipantsModal', 'block');
+            updateAddParticipants('addParticipantsList', contacts.filter((contact)=>{
+                return !participants.find((participant)=>{return participant.id==contact.uid})
+            }));
+        }
+
+        function showWhiteboard(){
+            if(!allowed) return;
+            window.open(`./board.html?room=${roomID}`, "_blank");
+        }
+
+        function sendInvite(id){
+            db.collection('users').doc(id).collection('rooms').add({
+                id:roomID,
+                name:localStorage.getItem("roomName")
+            });
+            db.collection('rooms').doc(roomID).collection('participants')
+            .add({
+                id:id,
+            }).then(()=>showAlert("success", "Added participant", "fa-check"));
+        }
+        function getRoom(){
+            roomsDB.get().then((doc) => {
+                if (doc.exists) {
+                    console.log(doc.data().name)
+                    localStorage.setItem('roomName', doc.data().name);
+                }
+            })
+        }
+        function loadChat(id) {
+            startLoading();
+            const msg={from:"bot",time:new Date(), msg:`${uid} Joined videoChat`}
+            Promise.all([fetchContacts(), addMsg(msg)]).then((values)=>{
+                let date=new Date();
+                contacts=values[0];
+                contacts.forEach((contact)=>nickNames[contact["uid"]]=contact["name"])
+                roomsDB.collection("chats").orderBy('time').onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added" && change.doc.id!=="details") {
+                        let msg={...change.doc.data(), time:change.doc.data().time.toDate()};
+                        msg.msg = msg.msg.replace(/[\u00A0-\u9999<>\&]/g, (item)=>{return '&#'+item.charCodeAt(0)+';';})
+                        if(msg.from ==='bot'){
+                            let end=msg.msg.indexOf(' ')
+                            let name=nickNames[msg.msg.substr(0,end)]
+                            if(name===undefined) name="Unknown";
+                            msg.msg = name+" "+msg.msg.substr(end+1);
+                        }
+                        document.getElementById('chats').insertAdjacentHTML('beforeend',createMsg(msg));
+                        document.getElementById('chats').style.visibility=(allowed?'visible':'hidden')
+                        if(msg.time>date && msg.from!=uid && !document.getElementById('sideWindow').classList.contains('left-slide')){
+                            showAlert("success", `${nickNames[msg.from]===undefined?(msg.from==='bot'?'':msg.from):nickNames[msg.from]+"<br/>"}${msg.msg}`,"")
+                        }
+                    }
+                });
+                stopLoading();
+                scrollDown("chats");
+            })
+            });
+            roomsDB = db.collection('rooms').doc(id);
+            document.getElementById('sideWindow').innerHTML = `<h3>${localStorage.getItem('roomName')}</h3>
+            <div id="chats" class="chats" style="height: calc(100% - 120px);">
+                 
+            </div>
+            <form id="sendMsg" style="display:flex;">
+                <textarea name="msg" class="msgInput"></textarea>
+                <button type="submit" style="margin:0"><i class="fa fa-send"></i></button>
+            </form>`;
+            document.getElementById('sendMsg').onsubmit=(e)=>sendMsg(e);
+            document.getElementsByClassName('msgInput')[0].onkeypress=((e)=>{
+                if(e.which == 13 && !e.shiftKey){
+                    e.preventDefault();
+                    document.getElementById('sendMsg').dispatchEvent(new SubmitEvent("submit"));
+                }
+            })
+            roomsDB.collection("participants").onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === "added") {
+                        participants.push(change.doc.data());
+                        if(change.doc.data()['id']==uid){
+                            allowed=true;
+                            getRoom();
+                            createFrameAndJoinRoom();
+                            document.getElementById('videos').innerHTML=''
+                            document.getElementById('chats').style.visibility='visible'
+                        }
+                        updateAddParticipants('addParticipantsList', contacts.filter((contact)=>{
+                            return !participants.find((participant)=>{return participant.id==contact.uid})
+                        }));
+                    }
+                    if(change.type==="removed"){
+                        const participant={...change.doc.data(), docID: change.doc.id};
+                        if(participant.id===uid){
+                            allowed=false;
+                            document.getElementById('chats').style.visibility='hidden'
+                            callFrame.leave();
+                            document.getElementById('videos').innerHTML='<i>You are not added in the room.<br/> Please contact Room owner.</i>';
+                        }
+                        participants.splice(participants.findIndex((p)=>participant.id===p.id),1);
+                        updateAddParticipants('addParticipantsList', contacts.filter((contact)=>{
+                            return !participants.find((participant)=>{return participant.id==contact.uid})
+                        }));
+                    }
+                });
+            })
+        }
+        function sendMsg(e){
             e.preventDefault();
+            let temp=e.target["msg"].value.trim();
+            if(!allowed || temp==null || temp==undefined || temp=='') return;
+            const msg={from:uid, msg:temp, time:new Date()};
+            addMsg(msg);
+            e.target.reset();
         }
-
-        function drag(e) {
-            e.dataTransfer.setData("Text", e.target.id);
+        function createMsg(msg) {
+            return `<div class="message ${msg.from === uid ? 'local' : (msg.from==='bot' ? 'bot':'remote')}-message">
+                    <div class="name">
+                        ${msg.from!=='bot' ? (nickNames[msg.from]===undefined ? "Unknown" :nickNames[msg.from]) : ""}
+                    </div>
+                    <div class="msg">
+                        ${msg.msg}
+                    </div>
+                </div>`
         }
-
-        function drop(e) {
-            let data = e.dataTransfer.getData("Text");
-            e.target.appendChild(document.getElementById(data));
-            e.preventDefault();
-        }
-
-        let connections = 1;
-        for (let i = 0; i < connections; i++) {
-
-        }
-       */
-
-        let contacts = [{
-            "id": "0",
-            "name": "Aman Jain",
-            "email": "amanpatniajmer@gmail.com"
-        }, {
-            "id": "1",
-            "name": "Aanchal Jain",
-            "email": "aanchal.jain.eee19@itbhu.ac.in"
-        }];
-        showAddParticipants('addParticipantsList');
-        let user = {
-            "id": localStorage.getItem('uid'),
-            "name": localStorage.getItem('name'),
-            "email": localStorage.getItem('email'),
-            "screen": false
-        };
-        let participants = [user];
-
-        function addShareScreen() {
-            let participant = {
-                ...user,
-                "screen": true
-            };
-            let index = createRemoteVideo(participant);
-            if (index === -1) {
-                showAlert("danger", "Cannot add more participants. Please remove one to continue.", "fa-close");
-                return;
+        function toggleReaction(className){
+            if(!allowed) return;
+            let classList;
+            let msg;
+            switch(className){
+                case 'fa fa-hand-paper-o':
+                    classList = document.querySelector('.video-controls button:nth-child(1)').classList;
+                    classList.toggle('selected')
+                    msg={from:"bot",time:new Date(), msg:`${uid} ${classList.contains('selected') ? 'raised hand': 'unraised hand' }`}
+                    addMsg(msg);
+                    break;
+                case 'fa fa-thumbs-o-up':
+                    msg={from:"bot",time:new Date(), msg:`${uid} Liked`}
+                    addMsg(msg);
+                    break;
+                case 'fa fa-thumbs-o-down':
+                    msg={from:"bot",time:new Date(), msg:`${uid} Disliked`}
+                    addMsg(msg);
+                    break;
             }
-            participants[index + 1] = participant;
-            shareScreen(index);
         }
-
-        function showParticipantsModal() {
-            updateParticipants(participants);
-            toggleVisibility('showParticipantsModal', 'block');
+        function showChat(){
+            let element=document.getElementById('sideWindow').classList.toggle('left-slide')
         }
     </script>
 

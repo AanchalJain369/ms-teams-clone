@@ -5,13 +5,21 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MS Teams Clone</title>
+    <title>LinkUp</title>
+    <meta name="theme-color" content="#6666aa" />
+    <meta
+      name="LinkUp"
+      content="Linkup is a web app using which you can link up with your friends with just one click."
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/logo_transparent948x948.png" type="image/png">
+    <link rel="apple-touch-icon" href="/logo_transparent152x152.png">
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
 
   <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
-  <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script>
+  <!-- <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-analytics.js"></script> -->
 
   <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
@@ -28,7 +36,19 @@
         measurementId: "G-0DKCPEVW7W"
     };
     firebase.initializeApp(firebaseConfig);
-    listenAuthChange();
+    var db;
+    async function initializeFirestore(){
+        return firebase.firestore().enablePersistence({synchronizeTabs: true})
+    }
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(function(registration) {
+            console.log('Registration successful, scope is:', registration.scope);
+        })
+        .catch(function(error) {
+            console.log('Service worker registration failed, error:', error);
+        });
+    }
 </script>
 </head>
 
@@ -38,37 +58,27 @@
     </header>
     <div>
         <div class="side-nav">
-            <div class="top">
-            </div>
             <div class="mid">
-            <a>
-                <i class="fa fa-bell-o"></i>
-            </a>
             <a href="./messaging.html">
                 <i class="fa fa-commenting-o"></i>
             </a>
             <a class="active">
                 <i class="fa fa-phone"></i>
             </a>
-            <a href="/index.html">
-                <i class="fa fa-history"></i>
-            </a>
-            </div>
-            <div class="bottom">
-                <a href="#" onclick="logout()">
-                    <i class="fa fa-sign-out"></i>
-                </a>
             </div>
         </div>
 
         <div class="main-window">
             <nav class="main-nav nav">
                 <ul>
-                    <h1>Meeting App</h1>
+                    <a href="/"><h1><img src="/logo_transparent152x152.png">LinkUp</h1></a>
                     <li class="right-align">
-                        <div class="avatar">
-                            AJ
-                        </div>
+                        <span id="name"></span>
+                        <button class="btn-primary border-radius">
+                            <a href="#" onclick="logout()">
+                                Logout <i class="fa fa-sign-out"></i>
+                            </a>
+                        </button>
                     </li>
                 </ul>
             </nav>
@@ -77,7 +87,7 @@
                 <div class="tab">
                     <input type="text" name="search" placeholder="Type a name" onkeyup="searchContacts(this.value)">
                     <div class="filters">
-                        <button class="btn-primary border-radius" id="addContact"><i class="fa fa-plus-circle"></i> Add new Contact</button>
+                        <button class="btn-primary border-radius" id="addContact"><i class="fa fa-plus-circle"></i> </button>
                     </div>
                     <div id="contactsList">
 
@@ -88,13 +98,13 @@
     </div>
     <div id="addContactModal" class="modal">
         <div class="modalBox border-radius">
-            <h1>Add new Contact <button class="right-align btn-danger" id="addContactClose"><i class="fa fa-close"></i></button></h1>
+            <h1>Add new Contact <button class="btn-danger" id="addContactClose"><i class="fa fa-close"></i></button></h1>
             <div class="content">
                 <form id="addContactForm">
                     <label>Enter Contact name:</label>
-                    <input type="text" name="name" />
+                    <input required type="text" name="name" />
                     <label>Enter Contact email:</label>
-                    <input type="email" name="email" />
+                    <input required type="email" name="email" />
                     <div class="text-center"><button type="submit" class="btn-success">Add <i
                                 class="fa fa-plus-circle"></i></button></div>
                 </form>
@@ -103,13 +113,13 @@
     </div>
     <div id="editContactModal" class="modal">
         <div class="modalBox border-radius">
-            <h1>Edit Contact <button class="right-align btn-danger" id="editContactClose"><i class="fa fa-close"></i></button></h1>
+            <h1>Edit Contact <button class="btn-danger" id="editContactClose"><i class="fa fa-close"></i></button></h1>
             <div class="content">
                 <form id="editContactForm">
                     <label>Edit contact name:</label>
-                    <input type="text" name="name" />
+                    <input required type="text" name="name" />
                     <label>Edit contact email:</label>
-                    <input type="email" name="email" />
+                    <input disabled required type="email" name="email" />
                     <div class="text-center"><button type="submit" class="btn-success">Edit <i
                                 class="fa fa-pencil"></i></button></div>
                 </form>
@@ -125,49 +135,71 @@
     </div>
     <script src="./calls_contacts.js"></script>
     <script>
+        name=localStorage.getItem('name')
+        uid=localStorage.getItem('uid');
+        document.querySelector('.main-nav #name').innerHTML=name+" ";
         startLoading();
-        document.onload=fetchContacts();
         let contacts = [];
-        async function fetchContacts(){
-            const db=firebase.firestore();
-            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
-            usersDB.collection('contacts').get().then(async(querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    contacts.push({...doc.data(), id:doc.id});
-                });
-                console.log(contacts)
-                updateContactsList(contacts, 'contactsList');
-                setTimeout(stopLoading, 1);
-            }).catch((error)=>console.log(error));
-        }
 
-        function stopLoading() {
-            document.getElementById('loading').style.display = "none";
-        }
-
-        function startLoading() {
-            document.getElementById('loading').style.display = "flex";
-            console.log('loading')
-        }
+        document.onload=Promise.all([initializeFirestore()])
+        .then(()=>{
+            db=firebase.firestore();
+            listenAuthChange();
+            fetchContacts().
+            then((tcontacts)=>{
+                contacts=tcontacts;
+                updateContactsList(contacts, 'contactsList')
+                stopLoading();
+            })
+        })
+        .catch((e)=>console.log(e))
 
         let addContactForm = document.getElementById('addContactForm');
         addContactForm.onsubmit = function(e) {
             e.preventDefault();
             startLoading();
-            const newContact = formToJSON(e.target);
-
-            const db=firebase.firestore();
-            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
-            usersDB.collection("contacts")
-            .add(newContact)
-            .then((res)=>{
-                showAlert("success", "Contact Saved", "fa-check");
-                contacts.push({...newContact, id:res.id});
-                updateContactsList(contacts, 'contactsList');
-                setTimeout(stopLoading, 1);
+            let newContact = formToJSON(e.target);
+            if(newContact.email===localStorage.getItem('email')){
+                showAlert("danger","You cannot add yourself","fa-close")
+                stopLoading()
+                return;
+            }
+            for(let i=0;i<contacts.length;i++){
+                if(contacts[i].email===newContact.email){
+                    showAlert("danger","Contact already exists","fa-close")
+                    stopLoading()
+                    return;
+                }
+            }
+            db.collection('users').where("email","==", newContact.email).get()
+            .then((querySnapshot)=>{
+                if(querySnapshot.size!=1){
+                    showAlert("danger","User does not exist","fa-close")
+                    stopLoading()
+                    return;
+                }
+                newContact.name=newContact.name.trim();
+                if(newContact.name==='' | newContact.name===null | newContact.name===undefined) {
+                    showAlert("danger","User name cannot be empty","fa-close")
+                    stopLoading()
+                    return;
+                }
+                querySnapshot.forEach((doc)=>{
+                    newContact={...newContact, uid:doc.id}
+                })
+                console.log(newContact);
+                usersDB = db.collection('users').doc(uid);
+                usersDB.collection("contacts")
+                .add(newContact)
+                .then((res)=>{
+                    showAlert("success", "Contact Saved", "fa-check");
+                    contacts.push({...newContact, id:res.id});
+                    updateContactsList(contacts, 'contactsList');
+                    stopLoading()
+                })
+                .catch((err)=>console.log(err));
+                addContactForm.reset();
             })
-            .catch((err)=>console.log(err));
-            addContactForm.reset();
         }
         document.getElementById('addContactClose').onclick = () => toggleVisibility('addContactModal', 'block');
         let newContactBtn = document.getElementById('addContact');
@@ -176,12 +208,13 @@
         }
 
         document.getElementById('editContactClose').onclick = () => toggleVisibility('editContactModal', 'block');
-        let editIndex = null;
+        let editID = null;
 
-        function editContact(index) {
-            editIndex = index;
+        function editContact(id) {
+            editID = id;
             document.getElementById('editContactModal').style.display = 'block';
             let form = document.getElementById('editContactForm');
+            let index=contacts.findIndex((contact)=>contact.id==id);
             for (let key in contacts[index]) {
                 if (!form.elements.hasOwnProperty(key)) continue;
                 form.elements[key].value = contacts[index][key];
@@ -191,40 +224,41 @@
         editContactForm.onsubmit = function(e) {
             e.preventDefault();
             startLoading();
+            if(editID===null) return;
             const newContact = formToJSON(e.target);
-            const db=firebase.firestore();
-            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
-            usersDB.collection("contacts").doc(contacts[editIndex].id)
-            .set(newContact)
+            newContact.name=newContact.name.trim();
+            if(newContact.name==='' | newContact.name===null | newContact.name===undefined) {
+                showAlert("danger","User name cannot be empty","fa-close")
+                stopLoading()
+                return;
+            }
+            usersDB = db.collection('users').doc(uid);
+            usersDB.collection("contacts").doc(editID)
+            .set(newContact, {merge:true})
             .then((res)=>{
                 showAlert("success", "Successfully edited contact", "fa-check");
-                setTimeout(stopLoading, 1);
+                let tempi=contacts.findIndex((contact)=>contact.id==editID);
+                contacts[tempi].name = newContact.name;
+                updateContactsList(contacts, 'contactsList');
+                editContactForm.reset();
+                editID = null;                    
             })
             .catch((err)=>console.log(err));
-            contacts[editIndex] = newContact;
-            updateContactsList(contacts, 'contactsList');
-            editContactForm.reset();
-            editIndex = null;
+            stopLoading()
         }
 
-        function deleteContact(index) {
+        function deleteContact(id) {
             startLoading();
-            const db=firebase.firestore();
-            usersDB = db.collection('users').doc(localStorage.getItem('uid'));
-            usersDB.collection("contacts").doc(contacts[index].id)
+            usersDB = db.collection('users').doc(uid);
+            usersDB.collection("contacts").doc(id)
             .delete()
             .then(()=>{
                 showAlert("success", "Successfully Deleted!", "fa-check")
-                setTimeout(stopLoading, 1);
+                stopLoading()
             })
             .catch((err)=>console.log(err));
-            contacts.splice(index, 1);
+            contacts.splice(contacts.findIndex((contact)=>contact.id==id), 1);
             updateContactsList(contacts, 'contactsList');
-        }
-
-        function setCallee(callee) {
-            localStorage.setItem("callee", callee)
-            window.location.href = "./videoCall.html";
         }
 
         function searchContacts(val) {

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkUp</title>
+    <meta name="theme-color" content="#6666aa" />
+    <meta
+      name="LinkUp"
+      content="Linkup is a web app using which you can link up with your friends with just one click."
+    />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" href="/logo_transparent948x948.png" type="image/png">
+    <link rel="apple-touch-icon" href="/logo_transparent152x152.png">
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+     <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.7/firebase-firestore.js"></script>
+    <script src="./utils.js"></script>
+    <script>
+    let firebaseConfig = {
+        apiKey: "AIzaSyAoThvyDnMKikCSZTzd00zp0_03lekKgGs",
+        authDomain: "ms-teams-clone-3687d.firebaseapp.com",
+        projectId: "ms-teams-clone-3687d",
+        storageBucket: "ms-teams-clone-3687d.appspot.com",
+        messagingSenderId: "35666250286",
+        appId: "1:35666250286:web:b24086e604e7338629adbf",
+        measurementId: "G-0DKCPEVW7W"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var db=firebase.firestore();
+    listenAuthChange();
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(function(registration) {
+            console.log('Registration successful, scope is:', registration.scope);
+        })
+        .catch(function(error) {
+            console.log('Service worker registration failed, error:', error);
+        });
+    }
+    </script>
+</head>
+<body>
+    <div style="width: 99vw; height: 98vh;" id="wt-container"></div>
+
+    <script src="https://www.whiteboard.team/dist/api.js"></script>
+    <script type="text/javascript">
+        let roomID = window.location.search.substr(6, window.location.search.length - 1);
+        let wt = new api.WhiteboardTeam('#wt-container', {
+            clientId: '5229738e3641811f7f21e7c28749b436',
+            boardCode: roomID
+        });
+        const msg={from:"bot",time:new Date(), msg:`${localStorage.getItem('uid')} Joined WhiteBoard`}
+        addMsg(msg)
+    </script>
+</body>
+</html>
